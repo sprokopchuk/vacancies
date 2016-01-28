@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160128130304) do
+ActiveRecord::Schema.define(version: 20160128132438) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,12 @@ ActiveRecord::Schema.define(version: 20160128130304) do
     t.integer  "user_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+  end
+
+  create_table "specialities", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -41,11 +47,13 @@ ActiveRecord::Schema.define(version: 20160128130304) do
     t.datetime "updated_at",                          null: false
     t.string   "country_name"
     t.string   "city"
+    t.integer  "speciality_id"
   end
 
   add_index "users", ["city"], name: "index_users_on_city", using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["speciality_id"], name: "index_users_on_speciality_id", using: :btree
 
   create_table "vacancies", force: :cascade do |t|
     t.string   "title"
@@ -58,4 +66,5 @@ ActiveRecord::Schema.define(version: 20160128130304) do
 
   add_index "vacancies", ["company_id"], name: "index_vacancies_on_company_id", using: :btree
 
+  add_foreign_key "users", "specialities"
 end

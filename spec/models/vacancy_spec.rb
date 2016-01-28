@@ -8,7 +8,7 @@ RSpec.describe Vacancy, type: :model do
   it {expect(subject).to validate_presence_of(:description)}
   it {expect(subject).to validate_presence_of(:deadline)}
   it {expect(subject).to belong_to(:company)}
-
+  it {expect(subject).to belong_to(:speciality)}
 
   context ".opened" do
     it "return the list of opened vacancies" do

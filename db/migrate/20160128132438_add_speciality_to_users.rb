@@ -4,6 +4,6 @@ class AddSpecialityToUsers < ActiveRecord::Migration
   end
 
   def down
-    remove_column :users, :speciality
+    remove_reference :users, :speciality, index: true
   end
 end

@@ -12,13 +12,13 @@ RSpec.describe Vacancy, type: :model do
   it {expect(subject).to belong_to(:company)}
   it {expect(subject).to belong_to(:speciality)}
 
-  context ".opened" do
+  context "by default" do
     it "return the list of opened vacancies" do
-      expect(Vacancy.opened).to match_array(opened_vacancies)
+      expect(Vacancy.all).to match_array(opened_vacancies)
     end
 
     it "doesn't return the list of opened vacancies" do
-      expect(Vacancy.opened).not_to match_array(archived_vacancies)
+      expect(Vacancy.all).not_to match_array(archived_vacancies)
     end
   end
 

@@ -3,7 +3,8 @@ FactoryGirl.define do
     title {Faker::Lorem.word}
     deadline {Faker::Date.forward(23)}
     description {Faker::Lorem.paragraph}
-
+    city {Faker::Address.city}
+    country {Faker::Address.country}
     factory :archived_vacancy do
       deadline {Faker::Date.backward(23)}
     end

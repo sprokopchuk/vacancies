@@ -7,6 +7,8 @@ RSpec.describe Vacancy, type: :model do
   it {expect(subject).to validate_presence_of(:title)}
   it {expect(subject).to validate_presence_of(:description)}
   it {expect(subject).to validate_presence_of(:deadline)}
+  it {expect(subject).to validate_presence_of(:city)}
+  it {expect(subject).to validate_presence_of(:country)}
   it {expect(subject).to belong_to(:company)}
   it {expect(subject).to belong_to(:speciality)}
 

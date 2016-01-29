@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :speciality do
-    name "MyString"
+    name {Faker::Company.profession}
   end
 
 end

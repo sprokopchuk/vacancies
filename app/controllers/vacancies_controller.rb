@@ -1,9 +1,10 @@
 class VacanciesController < ApplicationController
 
-  load_and_authorize_resource :exept => :create
+  load_and_authorize_resource :company
+  load_and_authorize_resource :vacancy, :through => :company, :except => :index
 
   def index
-    @vacancies = VacancySearch.new(@vacancies, params[:search]).call
+    @vacancies = VacancySearch.new(Vacancy.all, params[:search]).call
   end
 
   def show
@@ -18,7 +19,6 @@ class VacanciesController < ApplicationController
 
 
   def create
-    @vacancy = Vacancy.new(vacancy_params)
     if @vacancy.save
       redirect_to @vacancy, notice: 'Vacancy was successfully created.'
     else
@@ -36,7 +36,7 @@ class VacanciesController < ApplicationController
 
   def destroy
     @vacancy.destroy
-    redirect_to vacancies_url, notice: 'Vacancy was successfully destroyed.'
+    redirect_to vacancies_path, notice: 'Vacancy was successfully destroyed.'
   end
 
   private

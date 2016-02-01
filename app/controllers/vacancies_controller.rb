@@ -39,10 +39,19 @@ class VacanciesController < ApplicationController
     redirect_to vacancies_path, notice: 'Vacancy was successfully destroyed.'
   end
 
+  def attach_resume
+    if params[:vacancy][:file].present?
+      @vacancy.attach_resume(current_user.id, params[:vacancy][:file])
+      redirect_to @vacancy, notice: 'Your resumne was successfully sent.'
+    else
+      render :show
+    end
+  end
+
   private
 
   def vacancy_params
     params.require(:vacancy).permit(:title, :description, :deadline, :company_id,
-                                    :speciality_id, :city, :country)
+                                    :speciality_id, :city, :country, :file)
   end
 end

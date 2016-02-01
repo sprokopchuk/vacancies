@@ -105,7 +105,7 @@ RSpec.describe VacanciesController, type: :controller do
     before do
       allow(company).to receive_message_chain(:vacancies, :find).and_return vacancy
     end
-    it "receives update with vaccancy_params for @vacancy" do
+    it "receives update with vacancy_params for @vacancy" do
       expect(vacancy).to receive(:update).with(vacancy_params)
       put :update, company_id: company.id, id: vacancy.id, vacancy: vacancy_params
     end
@@ -158,6 +158,30 @@ RSpec.describe VacanciesController, type: :controller do
         delete :destroy, company_id: company.id, id: vacancy.id
         expect(response).to redirect_to(root_path)
       end
+    end
+  end
+
+  describe "POST #attach_resume" do
+    before do
+      allow(company).to receive_message_chain(:vacancies, :find).and_return vacancy
+      vacancy_params.merge!(file: authenticated_user.resume)
+    end
+
+    it "receives attach_resume with file" do
+      expect(vacancy).to receive(:attach_resume).with(authenticated_user.id, authenticated_user.resume.to_s)
+      post :attach_resume, id: vacancy.id, company_id: company.id, vacancy: vacancy_params
+    end
+
+    it "redirects to @vacancy if resume is attached" do
+      allow(vacancy).to receive(:attach_resume).and_return authenticated_user.resume
+      post :attach_resume, id: vacancy.id, company_id: company.id, vacancy: vacancy_params
+      expect(response).to redirect_to(vacancy_path(vacancy))
+    end
+
+    it "sends success message if resume is attached" do
+      allow(vacancy).to receive(:attach_resume).and_return authenticated_user.resume
+      post :attach_resume, id: vacancy.id, company_id: company.id, vacancy: vacancy_params
+      expect(flash[:notice]).to eq('Your resumne was successfully sent.')
     end
   end
 end

@@ -8,6 +8,7 @@ gem 'pg', '~> 0.15'
 gem 'devise'
 gem 'cancancan'
 gem 'kaminari'
+gem 'carrierwave'
 gem 'bootstrap-sass', '~> 3.3.5'
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets

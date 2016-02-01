@@ -7,5 +7,5 @@ Rails.application.routes.draw do
       post 'attach_resume', on: :member
     end
   end
-
+  resource :job_list, only: :show
 end

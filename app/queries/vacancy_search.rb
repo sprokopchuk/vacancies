@@ -4,10 +4,12 @@ class VacancySearch
   end
 
   def call
-    by_country
-    by_city
-    by_company
-    by_speciality
+    if @params
+      by_country
+      by_city
+      by_company
+      by_speciality
+    end
     @vacancies
   end
 

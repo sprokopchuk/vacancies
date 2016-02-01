@@ -1,13 +1,14 @@
 class VacanciesController < ApplicationController
 
-  load_and_authorize_resource :company
-  load_and_authorize_resource :vacancy, :through => :company, :except => :index
+  load_and_authorize_resource :company, :except => [:index, :show]
+  load_and_authorize_resource :vacancy, :through => :company, :except => [:index, :show]
 
   def index
     @vacancies = VacancySearch.new(Vacancy.all, params[:search]).call
   end
 
   def show
+    @vacancy = Vacancy.find(params[:id])
   end
 
 

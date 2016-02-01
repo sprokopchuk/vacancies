@@ -5,6 +5,7 @@ FactoryGirl.define do
     description {Faker::Lorem.paragraph}
     city {Faker::Address.city}
     country {Faker::Address.country}
+    speciality
     company
     factory :archived_vacancy do
       deadline {Faker::Date.backward(23)}

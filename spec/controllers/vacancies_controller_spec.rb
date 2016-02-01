@@ -24,10 +24,10 @@ RSpec.describe VacanciesController, type: :controller do
 
   describe "GET #show" do
     before do
-      allow(company).to receive_message_chain(:vacancies, :find).and_return vacancy
+      allow(Vacancy).to receive(:find).and_return vacancy
     end
     it "renders :show template" do
-      get :show, company_id: company.id, id: vacancy.id
+      get :show, id: vacancy.id
       expect(response).to render_template :show
     end
   end

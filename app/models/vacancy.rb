@@ -6,9 +6,11 @@ class Vacancy < ActiveRecord::Base
   default_scope -> {where("deadline > ?", Date.current)}
   scope :archived, -> {unscoped.where("deadline < ?", Date.current)}
 
-  def attach_resume user_id, file
-    unless self.users.exist? user_id
-      self.users.create resume: file
+  def attach_resume user, resume_file
+    unless self.users.exists? user.id
+      user.resume.store! resume_file
+      user.save!
+      self.users << user
     end
   end
 end

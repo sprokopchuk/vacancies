@@ -4,6 +4,7 @@ RSpec.describe Vacancy, type: :model do
   subject {FactoryGirl.create :vacancy}
   let(:opened_vacancies) {FactoryGirl.create_list(:vacancy, 3)}
   let(:archived_vacancies) {FactoryGirl.create_list(:archived_vacancy, 3)}
+  let(:authenticated_user) {FactoryGirl.create :user, resume: nil}
   it {expect(subject).to validate_presence_of(:title)}
   it {expect(subject).to validate_presence_of(:description)}
   it {expect(subject).to validate_presence_of(:deadline)}
@@ -29,6 +30,34 @@ RSpec.describe Vacancy, type: :model do
 
     it "doesn't return the list of archived vacancies" do
       expect(Vacancy.archived).not_to match_array(opened_vacancies)
+    end
+  end
+
+  context "#attach_resume" do
+    it "return nil if resume already is attached to vacancy" do
+      subject.attach_resume(authenticated_user, authenticated_user.resume.to_s)
+      expect(
+        subject.attach_resume(authenticated_user, authenticated_user.resume.to_s)
+        ).to eq nil
+    end
+
+
+    it "attach resume first time" do
+      file = File.open(File.join(Rails.root, 'spec', 'support', 'logo_image.png'))
+      subject.attach_resume(authenticated_user, file)
+      expect(authenticated_user.resume_identifier).to eq "logo_image.png"
+    end
+
+    it "return a list of users who's attached resume to vacancy" do
+      expect(
+        subject.attach_resume(authenticated_user, authenticated_user.resume.to_s)
+        ).to eq subject.users
+    end
+
+    it "change numbers of users are attached resume to vacancy" do
+      expect{
+        subject.attach_resume(authenticated_user, authenticated_user.resume.to_s)
+        }.to change{subject.users.size}.by(1)
     end
   end
 end

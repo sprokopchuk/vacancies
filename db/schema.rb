@@ -57,6 +57,11 @@ ActiveRecord::Schema.define(version: 20160201115220) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["speciality_id"], name: "index_users_on_speciality_id", using: :btree
 
+  create_table "users_vacancies", id: false, force: :cascade do |t|
+    t.integer "vacancy_id"
+    t.integer "user_id"
+  end
+
   create_table "vacancies", force: :cascade do |t|
     t.string   "title"
     t.date     "deadline"
@@ -71,11 +76,6 @@ ActiveRecord::Schema.define(version: 20160201115220) do
 
   add_index "vacancies", ["company_id"], name: "index_vacancies_on_company_id", using: :btree
   add_index "vacancies", ["speciality_id"], name: "index_vacancies_on_speciality_id", using: :btree
-
-  create_table "vacancies_users", id: false, force: :cascade do |t|
-    t.integer "vacancy_id"
-    t.integer "user_id"
-  end
 
   add_foreign_key "users", "specialities"
   add_foreign_key "vacancies", "specialities"

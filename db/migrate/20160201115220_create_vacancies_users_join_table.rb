@@ -1,6 +1,6 @@
 class CreateVacanciesUsersJoinTable < ActiveRecord::Migration
   def change
-    create_table :vacancies_users, id: false do |t|
+    create_table :users_vacancies, id: false do |t|
       t.integer :vacancy_id
       t.integer :user_id
     end

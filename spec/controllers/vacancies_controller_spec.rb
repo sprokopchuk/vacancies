@@ -56,7 +56,7 @@ RSpec.describe VacanciesController, type: :controller do
   describe "GET #index" do
     before do
       allow(Vacancy).to receive(:all).and_return [vacancy]
-      allow(VacancySearch).to receive_message_chain(:new, :call).and_return [vacancy]
+      allow(VacancySearch).to receive_message_chain(:new, :call, :page).and_return [vacancy]
     end
     it "receives new for VacancySearch" do
       expect(VacancySearch).to receive(:new).with([vacancy], nil)
@@ -182,6 +182,17 @@ RSpec.describe VacanciesController, type: :controller do
       allow(vacancy).to receive(:attach_resume).and_return authenticated_user.resume
       post :attach_resume, id: vacancy.id, company_id: company.id, vacancy: vacancy_params
       expect(flash[:notice]).to eq('Your resumne was successfully sent.')
+    end
+
+    context "without abilities to attach resume" do
+      before do
+        ability.cannot :attach_resume, vacancy
+      end
+
+      it "redirects to root_path" do
+        post :attach_resume, id: vacancy.id, company_id: company.id, vacancy: vacancy_params
+        expect(response).to redirect_to(root_path)
+      end
     end
   end
 end

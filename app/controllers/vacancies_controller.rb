@@ -2,9 +2,9 @@ class VacanciesController < ApplicationController
 
   load_and_authorize_resource :company, :except => [:index, :show]
   load_and_authorize_resource :vacancy, :through => :company, :except => [:index, :show]
-
+  before_action :specialities, except: [:create, :update, :destroy, :attach_resume]
   def index
-    @vacancies = VacancySearch.new(Vacancy.all, params[:search]).call
+    @vacancies = VacancySearch.new(Vacancy.all, params).call.page(params[:page])
   end
 
   def show
@@ -51,6 +51,10 @@ class VacanciesController < ApplicationController
 
   private
 
+
+  def specialities
+    @specialities = Speciality.all
+  end
   def vacancy_params
     params.require(:vacancy).permit(:title, :description, :deadline, :company_id,
                                     :speciality_id, :city, :country, :file)

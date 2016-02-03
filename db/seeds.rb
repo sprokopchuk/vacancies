@@ -16,24 +16,31 @@ puts "Create company"
 profs = FactoryGirl.create_list :speciality, 4
 puts "Create professions"
 10.times.each do
-  FactoryGirl.create :vacancy, company: com, speciality: profs[0]
+  FactoryGirl.create :vacancy, company: com, speciality: profs[0], country: "AD"
 end
 
 10.times.each do
-  FactoryGirl.create :vacancy, company: com, speciality: profs[1]
+  FactoryGirl.create :vacancy, company: com, speciality: profs[1], country: "US"
 end
 
 10.times.each do
-  FactoryGirl.create :vacancy, company: com, speciality: profs[2]
+  FactoryGirl.create :vacancy, company: com, speciality: profs[2], country: "AL"
 end
 
 10.times.each do
-  FactoryGirl.create :vacancy, company: com, speciality: profs[3]
+  FactoryGirl.create :vacancy, company: com, speciality: profs[3], country: "UK"
 end
 
 10.times.each do
-  FactoryGirl.create :archived_vacancy, company: com, speciality: profs[3]
+  FactoryGirl.create :archived_vacancy, company: com, speciality: profs[3], country: "AL"
 end
 
 puts "Create vacancies"
+
+=begin
+User.delete_all
+Company.delete_all
+Vacancy.unscoped.delete_all
+Speciality.delete_all
+=end
 

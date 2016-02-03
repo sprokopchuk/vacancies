@@ -13,4 +13,12 @@ class Vacancy < ActiveRecord::Base
       self.users << user
     end
   end
+
+  def archived?
+    self.deadline < Date.current
+  end
+
+  def applied? user
+    self.users.exists? user.id
+  end
 end

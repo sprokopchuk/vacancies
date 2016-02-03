@@ -60,4 +60,25 @@ RSpec.describe Vacancy, type: :model do
         }.to change{subject.users.size}.by(1)
     end
   end
+
+  context "#archived?" do
+    it "return true if vacancy is archived" do
+      expect(archived_vacancies[0].archived?).to be_truthy
+    end
+
+    it "return false if vacancy is opened" do
+      expect(opened_vacancies[0].archived?).to be_falsey
+    end
+  end
+
+  context "#applied?" do
+    it "return true if user is applied resume to vacancy" do
+      subject.attach_resume(authenticated_user, authenticated_user.resume.to_s)
+      expect(subject.applied? authenticated_user).to be_truthy
+    end
+
+    it "return false if user is not applied resume to vacancy" do
+      expect(subject.applied? authenticated_user).to be_falsey
+    end
+  end
 end

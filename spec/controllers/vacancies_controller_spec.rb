@@ -24,7 +24,7 @@ RSpec.describe VacanciesController, type: :controller do
 
   describe "GET #show" do
     before do
-      allow(Vacancy).to receive(:find).and_return vacancy
+      allow(Vacancy).to receive_message_chain(:unscoped, :find).and_return vacancy
     end
     it "renders :show template" do
       get :show, id: vacancy.id
@@ -57,10 +57,6 @@ RSpec.describe VacanciesController, type: :controller do
     before do
       allow(Vacancy).to receive(:all).and_return [vacancy]
       allow(VacancySearch).to receive_message_chain(:new, :call, :page).and_return [vacancy]
-    end
-    it "receives new for VacancySearch" do
-      expect(VacancySearch).to receive(:new).with([vacancy], nil)
-      get :index
     end
     it "renders :index template" do
       get :index
@@ -163,12 +159,12 @@ RSpec.describe VacanciesController, type: :controller do
 
   describe "POST #attach_resume" do
     before do
-      allow(company).to receive_message_chain(:vacancies, :find).and_return vacancy
+      allow(Vacancy).to receive_message_chain(:unscoped, :find).and_return vacancy
       vacancy_params.merge!(file: authenticated_user.resume)
     end
 
     it "receives attach_resume with file" do
-      expect(vacancy).to receive(:attach_resume).with(authenticated_user.id, authenticated_user.resume.to_s)
+      expect(vacancy).to receive(:attach_resume).with(authenticated_user, authenticated_user.resume.to_s)
       post :attach_resume, id: vacancy.id, company_id: company.id, vacancy: vacancy_params
     end
 

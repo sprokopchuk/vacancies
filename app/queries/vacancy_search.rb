@@ -4,32 +4,38 @@ class VacancySearch
   end
 
   def call
-    if @params
+    if @params[:search]
       by_country
       by_city
       by_company
-      by_speciality
     end
+    archived
+    by_speciality
     @vacancies
   end
 
   private
 
+  def archived
+    if @params[:archived].present?
+      @vacancies = Vacancy.archived
+    end
+  end
   def by_country
-    if @params[:country].present?
-      @vacancies = @vacancies.where("country = ?", @params[:country])
+    if @params[:search][:country].present?
+      @vacancies = @vacancies.where("country = ?", @params[:search][:country])
     end
   end
 
   def by_city
-    if @params[:city].present?
-      @vacancies = @vacancies.where("city = ?", @params[:city])
+    if @params[:search][:city].present?
+      @vacancies = @vacancies.where("city = ?", @params[:search][:city])
     end
   end
 
   def by_company
-    if @params[:company_id].present?
-      @vacancies = @vacancies.where("company_id = ?", @params[:company_id])
+    if @params[:search][:company_id].present?
+      @vacancies = @vacancies.where("company_id = ?", @params[:search][:company_id])
     end
   end
 

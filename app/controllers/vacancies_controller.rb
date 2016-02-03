@@ -1,14 +1,14 @@
 class VacanciesController < ApplicationController
 
-  load_and_authorize_resource :company, :except => [:index, :show]
-  load_and_authorize_resource :vacancy, :through => :company, :except => [:index, :show]
+  load_and_authorize_resource :company, :except => [:index, :show, :attach_resume]
+  load_and_authorize_resource :vacancy, :through => :company, :except => [:index, :show, :attach_resume]
   before_action :specialities, except: [:create, :update, :destroy, :attach_resume]
   def index
     @vacancies = VacancySearch.new(Vacancy.all, params).call.page(params[:page])
   end
 
   def show
-    @vacancy = Vacancy.find(params[:id])
+    @vacancy = Vacancy.unscoped.find(params[:id])
   end
 
 
@@ -41,8 +41,10 @@ class VacanciesController < ApplicationController
   end
 
   def attach_resume
+    @vacancy = Vacancy.unscoped.find(params[:id])
+    authorize! :attach_resume, @vacancy
     if params[:vacancy][:file].present?
-      @vacancy.attach_resume(current_user.id, params[:vacancy][:file])
+      @vacancy.attach_resume(current_user, params[:vacancy][:file])
       redirect_to @vacancy, notice: 'Your resumne was successfully sent.'
     else
       render :show

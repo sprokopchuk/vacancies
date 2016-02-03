@@ -10,7 +10,7 @@ RSpec.describe JobListsController, type: :controller do
     end
     it "renders :show template" do
       allow(request.env['warden']).to receive(:authenticate!).and_return(authenticated_user)
-      allow(authenticated_user).to receive(:vacancies).and_return [vacancy]
+      allow(authenticated_user).to receive_message_chain(:vacancies, :page).and_return [vacancy]
       get :show
       expect(response).to render_template :show
     end

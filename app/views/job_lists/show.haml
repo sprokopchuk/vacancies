@@ -1,0 +1,10 @@
+.col-sm-6.col-md-5.col-md-offset-2
+  %h1.col-md-offset-2 Apply history
+  - if @job_list.any?
+    = render partial: "shared/list_jobs", locals: {vacancies: @job_list}
+  - else
+    .alert.alert-warning.fade.in
+      You have applied for 0 jobs
+  .col-md-8.col-md-offset-3
+    = paginate @job_list
+= render partial: 'shared/specialities', locals: {specialities: @specialities}

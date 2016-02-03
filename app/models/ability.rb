@@ -8,6 +8,7 @@ class Ability
       can :manage, Vacancy, :company => {:user_id => user.id}
       can :read, Vacancy
     else
+      can :attach_resume, Vacancy if user.persisted?
       can :read, Vacancy
     end
 

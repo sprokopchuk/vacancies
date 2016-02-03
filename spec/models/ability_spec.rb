@@ -22,6 +22,7 @@ RSpec.describe Ability, type: :model do
   describe "abilities for applicant" do
     subject {Ability.new(applicant_user)}
     context "for vacancies" do
+      it {expect(subject).to be_able_to(:attach_resume, vacancy)}
       it {expect(subject).to be_able_to(:read, vacancy)}
       it {expect(subject).not_to be_able_to(:create, Vacancy)}
       it {expect(subject).not_to be_able_to(:update, vacancy)}

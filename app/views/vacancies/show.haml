@@ -1,0 +1,39 @@
+.col-sm-6.col-md-5.col-md-offset-2
+  .row
+    .panel.panel-info
+      .panel-heading.col-md-12
+        %span.pull-left{:style => "font-size: 30px"}
+          = @vacancy.title.humanize
+        %span.pull-right
+          %b.text-danger #{@vacancy.deadline}
+        %br
+        .clearfix
+        .col-md-4
+          %b Country:
+          = CS.countries[@vacancy.country.upcase.to_sym]
+        .col-md-4
+          %b City:
+          = @vacancy.city
+        .col-md-4
+          %b Company:
+          = link_to @vacancy.company.name, vacancies_path(:company_id => @vacancy.company.id)
+      .panel-body
+        = @vacancy.description
+      .panel-footer
+        - if user_signed_in? && !@vacancy.archived? && !@vacancy.applied?(current_user)
+          = form_tag attach_resume_vacancy_path, class: "navbar-form" do
+            .form-group
+              = file_field_tag "vacancy[file]", class: "form-control"
+            = submit_tag "Send resume", class: "btn btn-default"
+        - elsif user_signed_in? && @vacancy.archived?
+          .alert.alert-warning.fade.in
+            You don't have rigths to apply your resume to this archived job
+        - elsif user_signed_in? && @vacancy.applied?(current_user)
+          .alert.alert-warning.fade.in
+            You already apply your resume to this job
+        -else
+          .alert.alert-warning.fade.in
+            You have to authenticate to apply your resume to this job
+= render partial: 'shared/specialities', locals: {specialities: @specialities}
+
+

@@ -1,0 +1,14 @@
+.col-sm-6.col-md-5.col-md-offset-2
+  = simple_form_for @search, url: vacancies_path, method: :get,  html: { class: 'navbar-form' } do |f|
+    .form-group
+      = f.input :country, name: :country, collection: CountryStateSelect.countries_collection, input_html: {"data-placeholder" => "Choose a country...", name: "country"}, label: false
+      = f.input :state, CountryStateSelect.state_options({ form: f, field_names: { :country => :country, :state => :state}, input_html: {"data-placeholder" => "Choose a state...", name: "state"}, label: false})
+      = f.input :city, CountryStateSelect.city_options({ form: f, field_names: { :state => :state, :city => :city}, input_html: {"data-placeholder" => "Choose a city...", name: "city"}, label: false})
+      = f.button :submit, "Search", class: "btn btn-default btn-sm"
+.col-sm-6.col-md-5.col-md-offset-2
+  %h1.col-md-offset-2 Listing Jobs
+  = render partial: "shared/list_jobs", locals: {vacancies: @vacancies}
+  .col-md-8.col-md-offset-3
+    = paginate @vacancies
+= render partial: 'shared/specialities', locals: {specialities: @specialities}
+

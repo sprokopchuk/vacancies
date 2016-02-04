@@ -1,0 +1,21 @@
+- vacancies.each do |vacancy|
+  .panel.panel-info
+    .panel-heading.col-md-12
+      .panel-title
+      %span.pull-left{:style => "font-size: 30px"}
+        = link_to vacancy.title.humanize, vacancy
+      %span.pull-right
+        %b.text-danger #{vacancy.deadline}
+      %br
+      .clearfix
+      .col-md-4
+        %b Country:
+        = CS.countries[vacancy.country.upcase.to_sym]
+      .col-md-4
+        %b City:
+        = vacancy.city
+      .col-md-4
+        %b Company:
+        = link_to vacancy.company.name, vacancies_path(:company_id => vacancy.company.id)
+    .panel-body
+      = vacancy.description.truncate(200)

@@ -1,0 +1,8 @@
+.col-sm-1.col-md-2
+  .text-center
+    %h3
+      %b
+        Professions
+  .list-group
+    - @specialities.each do |speciality|
+      = link_to speciality.name, vacancies_path(:speciality_id => speciality.id), class: "list-group-item " + active_class(vacancies_path(speciality, :speciality_id => speciality.id))

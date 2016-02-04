@@ -12,8 +12,6 @@ class VacancySearch
   attribute :company_id, String, :default => :default_company_id
   attribute :speciality_id, String, :default => :default_speciality_id
   def call
-    p country
-    p city
     by_country
     by_city
     by_company

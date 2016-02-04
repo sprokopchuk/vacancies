@@ -10,10 +10,10 @@
         .clearfix
         .col-md-4
           %b Country:
-          = CS.countries[@vacancy.country.upcase.to_sym]
+          = link_to CS.countries[@vacancy.country.upcase.to_sym], vacancies_path(:country => @vacancy.country)
         .col-md-4
           %b City:
-          = @vacancy.city
+          = link_to @vacancy.city, vacancies_path(:city => @vacancy.city)
         .col-md-4
           %b Company:
           = link_to @vacancy.company.name, vacancies_path(:company_id => @vacancy.company.id)

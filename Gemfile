@@ -13,7 +13,8 @@ gem 'bootstrap-sass', '~> 3.3.5'
 gem 'sass-rails', '~> 5.0'
 gem "haml-rails", "~> 0.9"
 gem 'chosen-rails'
-gem 'country_state_select', '3.0.0'
+gem 'country_state_select', '~> 3.0', '>= 3.0.1'
+gem 'virtus'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views

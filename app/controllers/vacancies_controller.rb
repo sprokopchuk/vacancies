@@ -1,10 +1,12 @@
 class VacanciesController < ApplicationController
 
-  load_and_authorize_resource :company, :except => [:index, :show, :attach_resume]
-  load_and_authorize_resource :vacancy, :through => :company, :except => [:index, :show, :attach_resume]
-  before_action :specialities, except: [:create, :update, :destroy, :attach_resume]
+  load_and_authorize_resource :company, :except => [:index, :show, :attach_resume, :archived]
+  load_and_authorize_resource :vacancy, :through => :company, :except => [:index, :show, :attach_resume, :archived]
+  before_action :specialities, except: [:create, :update, :destroy]
+
   def index
-    @vacancies = VacancySearch.new(Vacancy.all, params).call.page(params[:page])
+    @search = VacancySearch.new(params)
+    @vacancies = @search.call.page(params[:page])
   end
 
   def show
@@ -18,6 +20,10 @@ class VacanciesController < ApplicationController
   def edit
   end
 
+
+  def archived
+    @vacancies = Vacancy.archived.page(params[:page])
+  end
 
   def create
     if @vacancy.save
@@ -52,7 +58,6 @@ class VacanciesController < ApplicationController
   end
 
   private
-
 
   def specialities
     @specialities = Speciality.all

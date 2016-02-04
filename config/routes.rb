@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   root "vacancies#index"
   devise_for :users
-  resources :vacancies, only: :index
+  resources :vacancies, only: :index do
+    get 'archived', on: :collection
+  end
   resource :company, shallow: true do
     resources :vacancies, except: :index do
       post 'attach_resume', on: :member

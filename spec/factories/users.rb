@@ -4,11 +4,16 @@ FactoryGirl.define do
     last_name {Faker::Name.last_name}
     email {Faker::Internet.email}
     password {12345678}
+    role "applicant"
     resume do
       File.open(File.join(Rails.root, 'spec', 'support', 'logo_image.png'))
     end
     factory :employer do
-      employer true
+      role "employer"
+    end
+
+    factory :admin do
+      role "admin"
     end
   end
 

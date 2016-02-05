@@ -18,7 +18,12 @@
               = link_to "Archived Jobs", archived_vacancies_path
           %ul.nav.navbar-nav.navbar-right
             - if user_signed_in?
-              - unless current_user.employer?
+              %li.navbar-text
+                %b Hello, #{current_user.role.to_s.humanize}!
+              - if can? :manage, Vacancy
+                %li
+                  = link_to "Post a vacancy", new_company_vacancy_path(:company_id => current_user.company.id)
+              - else
                 %li{:class => active_class(job_list_path)}
                   = link_to "Job List", job_list_path
               %li{:class => active_class(edit_user_registration_path(current_user))}

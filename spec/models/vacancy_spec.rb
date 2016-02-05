@@ -5,11 +5,10 @@ RSpec.describe Vacancy, type: :model do
   let(:opened_vacancies) {FactoryGirl.create_list(:vacancy, 3)}
   let(:archived_vacancies) {FactoryGirl.create_list(:archived_vacancy, 3)}
   let(:authenticated_user) {FactoryGirl.create :user, resume: nil}
+  let(:employer) {FactoryGirl.create :employer}
   it {expect(subject).to validate_presence_of(:title)}
   it {expect(subject).to validate_presence_of(:description)}
   it {expect(subject).to validate_presence_of(:deadline)}
-  it {expect(subject).to validate_presence_of(:city)}
-  it {expect(subject).to validate_presence_of(:country)}
   it {expect(subject).to belong_to(:company)}
   it {expect(subject).to belong_to(:speciality)}
 
@@ -61,24 +60,29 @@ RSpec.describe Vacancy, type: :model do
     end
   end
 
-  context "#archived?" do
-    it "return true if vacancy is archived" do
-      expect(archived_vacancies[0].archived?).to be_truthy
+  context "#can_applly?" do
+
+    it "return false if user is employer" do
+       expect(archived_vacancies[0].can_applly? employer).to be_falsey
+    end
+    it "return false if vacancy is archived" do
+      expect(archived_vacancies[0].can_applly? authenticated_user).to be_falsey
     end
 
-    it "return false if vacancy is opened" do
-      expect(opened_vacancies[0].archived?).to be_falsey
+    it "return false if user is not sign in" do
+      expect(opened_vacancies[0].can_applly? nil).to be_falsey
     end
-  end
+    it "return true if vacancy is opened" do
+      expect(opened_vacancies[0].can_applly? authenticated_user).to be_truthy
+    end
 
-  context "#applied?" do
-    it "return true if user is applied resume to vacancy" do
+    it "return false if user is already applied resume to vacancy" do
       subject.attach_resume(authenticated_user, authenticated_user.resume.to_s)
-      expect(subject.applied? authenticated_user).to be_truthy
+      expect(subject.can_applly? authenticated_user).to be_falsey
     end
 
-    it "return false if user is not applied resume to vacancy" do
-      expect(subject.applied? authenticated_user).to be_falsey
+    it "return true if user is not applied resume to vacancy" do
+      expect(subject.can_applly? authenticated_user).to be_truthy
     end
   end
 end

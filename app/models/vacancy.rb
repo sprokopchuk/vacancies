@@ -5,6 +5,7 @@ class Vacancy < ActiveRecord::Base
   has_and_belongs_to_many :users
   default_scope -> {where("deadline > ?", Date.current)}
   scope :archived, -> {unscoped.where("deadline < ?", Date.current)}
+  before_validation :set_city_and_country
 
   def attach_resume user, resume_file
     unless self.users.exists? user.id
@@ -14,11 +15,15 @@ class Vacancy < ActiveRecord::Base
     end
   end
 
-  def archived?
-    self.deadline < Date.current
+  def can_applly? user
+    user &&
+    self.deadline > Date.current &&
+    user.role?(:applicant) &&
+    !self.users.exists?(user.id)
   end
 
-  def applied? user
-    self.users.exists? user.id
+  def set_city_and_country
+    self.city = self.company.city
+    self.country = self.company.country
   end
 end

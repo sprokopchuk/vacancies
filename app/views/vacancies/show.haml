@@ -20,20 +20,14 @@
       .panel-body
         = @vacancy.description
       .panel-footer
-        - if user_signed_in? && !@vacancy.archived? && !@vacancy.applied?(current_user)
+        - if @vacancy.can_applly?(current_user)
           = form_tag attach_resume_vacancy_path, class: "navbar-form" do
             .form-group
               = file_field_tag "vacancy[file]", class: "form-control"
             = submit_tag "Send resume", class: "btn btn-default"
-        - elsif user_signed_in? && @vacancy.archived?
-          .alert.alert-warning.fade.in
-            You don't have rigths to apply your resume to this archived job
-        - elsif user_signed_in? && @vacancy.applied?(current_user)
-          .alert.alert-warning.fade.in
-            You already apply your resume to this job
         -else
           .alert.alert-warning.fade.in
-            You have to authenticate to apply your resume to this job
+            You don't have rights to apply your resume
 = render partial: 'shared/specialities', locals: {specialities: @specialities}
 
 

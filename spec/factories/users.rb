@@ -9,6 +9,8 @@ FactoryGirl.define do
       File.open(File.join(Rails.root, 'spec', 'support', 'logo_image.png'))
     end
     factory :employer do
+      country {Faker::Address.country_code}
+      city {Faker::Address.city}
       role "employer"
     end
 

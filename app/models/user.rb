@@ -11,10 +11,21 @@ class User < ActiveRecord::Base
   before_create :set_approved
   has_and_belongs_to_many :vacancies
   has_one :company
-  validates :company, presence: true, if: "role? :employer"
 
   def role?(role)
     self.role.to_sym == role
+  end
+
+  def active_for_authentication?
+    super && approved?
+  end
+
+  def inactive_message
+    if !approved?
+      :not_approved
+    else
+      super
+    end
   end
 
   private

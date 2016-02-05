@@ -2,6 +2,11 @@
   = form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
     = devise_error_messages!
     .form-group
+      = f.label "Role"
+      %br/
+      .input-group.field
+      = f.collection_select(:role, User::ROLES.drop(1), :to_s, lambda{|i| i.to_s.humanize}, {}, {class: "form-control"})
+
       = f.label I18n.t("settings.edit_info.first_name")
       %br/
       .input-group.field

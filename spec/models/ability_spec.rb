@@ -9,13 +9,41 @@ RSpec.describe Ability, type: :model do
   describe "abilities for employer" do
     subject{Ability.new(employer_user)}
     context "for vacancies" do
+      context "can't manage own vacancies if employer is not approved" do
+        it {expect(subject).not_to be_able_to(:create, Vacancy)}
+        it {expect(subject).not_to be_able_to(:update, vacancy)}
+        it {expect(subject).not_to be_able_to(:destroy, vacancy)}
+      end
+
+      context "can manage own vacancies if employer is approved" do
+        before do
+          employer_user.update(:approved => true)
+        end
+        it {expect(subject).to be_able_to(:create, Vacancy)}
+        it {expect(subject).to be_able_to(:update, vacancy)}
+        it {expect(subject).to be_able_to(:destroy, vacancy)}
+      end
       it {expect(subject).to be_able_to(:read, vacancy)}
-      it {expect(subject).to be_able_to(:create, Vacancy)}
-      it {expect(subject).to be_able_to(:update, vacancy)}
-      it {expect(subject).to be_able_to(:destroy, vacancy)}
       it {expect(subject).to be_able_to(:read, other_vacancy)}
       it {expect(subject).not_to be_able_to(:update, other_vacancy)}
       it {expect(subject).not_to be_able_to(:destroy, other_vacancy)}
+    end
+
+    context "for company" do
+      context "can't manage company if employer is not approved" do
+        it {expect(subject).not_to be_able_to(:create, Company)}
+        it {expect(subject).not_to be_able_to(:update, company)}
+        it {expect(subject).not_to be_able_to(:destroy, company)}
+      end
+
+      context "can manage company if employer is approved" do
+        before do
+          employer_user.update(:approved => true)
+        end
+        it {expect(subject).to be_able_to(:create, Company)}
+        it {expect(subject).to be_able_to(:update, company)}
+        it {expect(subject).to be_able_to(:destroy, company)}
+      end
     end
   end
 

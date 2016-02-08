@@ -8,7 +8,6 @@ RSpec.describe User, type: :model do
   it {expect(subject).to validate_presence_of(:last_name)}
   it {expect(subject).to belong_to(:speciality)}
   it {expect(subject).not_to validate_presence_of(:company)}
-  it {expect(employer).to validate_presence_of(:company)}
 
   context "#role?" do
     it "return true if user is applicant" do

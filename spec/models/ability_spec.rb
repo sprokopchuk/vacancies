@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Ability, type: :model do
   let(:employer_user) {FactoryGirl.create :employer}
   let(:company) {FactoryGirl.create :company, user: employer_user}
+  let(:other_company) {FactoryGirl.create :company}
   let(:vacancy) {FactoryGirl.create :vacancy, company: company}
   let(:other_vacancy) {FactoryGirl.create :vacancy}
   let(:applicant_user) {FactoryGirl.create :user}
@@ -29,17 +30,26 @@ RSpec.describe Ability, type: :model do
       it {expect(subject).not_to be_able_to(:destroy, other_vacancy)}
     end
 
-    context "for company" do
+    context "for companies" do
       context "can't manage company if employer is not approved" do
         it {expect(subject).not_to be_able_to(:create, Company)}
         it {expect(subject).not_to be_able_to(:update, company)}
         it {expect(subject).not_to be_able_to(:destroy, company)}
       end
 
+      context "can't manage other company" do
+        before do
+          employer_user.update(:approved => true)
+        end
+        it {expect(subject).not_to be_able_to(:update, other_company)}
+        it {expect(subject).not_to be_able_to(:destroy, other_company)}
+        it {expect(subject).to be_able_to(:read, other_company)}
+      end
       context "can manage company if employer is approved" do
         before do
           employer_user.update(:approved => true)
         end
+        it {expect(subject).to be_able_to(:read, company)}
         it {expect(subject).to be_able_to(:create, Company)}
         it {expect(subject).to be_able_to(:update, company)}
         it {expect(subject).to be_able_to(:destroy, company)}
@@ -55,6 +65,32 @@ RSpec.describe Ability, type: :model do
       it {expect(subject).not_to be_able_to(:create, Vacancy)}
       it {expect(subject).not_to be_able_to(:update, vacancy)}
       it {expect(subject).not_to be_able_to(:destroy, vacancy)}
+    end
+
+    context "for companies" do
+      it {expect(subject).to be_able_to(:read, company)}
+      it {expect(subject).not_to be_able_to(:create, Company)}
+      it {expect(subject).not_to be_able_to(:update, company)}
+      it {expect(subject).not_to be_able_to(:destroy, company)}
+
+    end
+  end
+
+  describe "abilities for guests" do
+    subject {Ability.new(nil)}
+    context "for vacancies" do
+      it {expect(subject).not_to be_able_to(:attach_resume, vacancy)}
+      it {expect(subject).to be_able_to(:read, vacancy)}
+      it {expect(subject).not_to be_able_to(:create, Vacancy)}
+      it {expect(subject).not_to be_able_to(:update, vacancy)}
+      it {expect(subject).not_to be_able_to(:destroy, vacancy)}
+    end
+
+    context "for companies" do
+      it {expect(subject).to be_able_to(:read, company)}
+      it {expect(subject).not_to be_able_to(:create, Company)}
+      it {expect(subject).not_to be_able_to(:update, company)}
+      it {expect(subject).not_to be_able_to(:destroy, company)}
     end
   end
 end

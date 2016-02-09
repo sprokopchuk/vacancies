@@ -6,11 +6,13 @@ class Ability
     user ||= User.new
     if user.role? :employer
       if user.approved?
-        can :manage, Company, :user_id => user.id
-        can :manage, Vacancy, :company => {:user_id => user.id}
+        can [:create, :update, :destroy], Company, :user_id => user.id
+        can [:create, :update, :destroy], Vacancy, :company => {:user_id => user.id}
      end
+      can :read, Company
       can :read, Vacancy
     else
+      can :read, Company
       can :attach_resume, Vacancy if user.persisted?
       can :read, Vacancy
     end

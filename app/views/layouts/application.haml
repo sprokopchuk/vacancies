@@ -16,11 +16,18 @@
               = link_to "Home", root_path
             %li{:class => active_class(archived_vacancies_path)}
               = link_to "Archived Jobs", archived_vacancies_path
+            %li
+              = form_tag vacancies_path, method: :get, class: "navbar-form" do
+                .form-group
+                  = text_field_tag :search, params[:search], class: "form-control", placeholder: "Search"
+                = submit_tag "Search", class: "btn btn-default"
           %ul.nav.navbar-nav.navbar-right
             - if user_signed_in?
               %li.navbar-text
                 %b Hello, #{current_user.role.to_s.humanize}!
-              - if can? :manage, Vacancy
+              - if current_user.role? :employer
+                %li
+                  = link_to "My company", company_path(current_user.company)
                 %li
                   = link_to "Post a vacancy", new_company_vacancy_path(:company_id => current_user.company.id)
               - else

@@ -16,6 +16,6 @@
         = link_to vacancy.city, vacancies_path(:city => vacancy.city)
       .col-md-4
         %b Company:
-        = link_to vacancy.company.name, vacancies_path(:company_id => vacancy.company.id)
+        = link_to vacancy.company.name, vacancy.company
     .panel-body
       = vacancy.description.truncate(200)

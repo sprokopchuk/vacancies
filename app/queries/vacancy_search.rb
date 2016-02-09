@@ -22,7 +22,7 @@ class VacancySearch
   private
 
   def default_vacancies
-    Vacancy.all
+    Vacancy.unscoped.all
   end
 
   def default_country

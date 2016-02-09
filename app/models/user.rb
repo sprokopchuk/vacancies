@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
   has_one :company
 
   def role?(role)
-    self.role.to_sym == role
+    self.role.to_sym == role if self.role
   end
 
   def active_for_authentication?

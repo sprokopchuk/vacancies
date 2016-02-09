@@ -4,47 +4,65 @@ RSpec.describe VacancySearch, type: :model do
 
   let(:company) {FactoryGirl.create :company}
   let(:opened_vacancies) {FactoryGirl.create_list :vacancy, 3, company: company}
+  let(:searched_vacancy) {FactoryGirl.create :vacancy}
   let(:params) {{}}
   context "#call" do
+
     before do
       opened_vacancies
+      searched_vacancy
     end
-
     it "return the list of vacancies by default" do
-      expect(VacancySearch.new(params: {}).call).to match_array(opened_vacancies)
+      expect(VacancySearch.new(params: {}).call).to match_array(opened_vacancies << searched_vacancy)
     end
 
-    it "return the list of vacancies if params[:search][:country] is passed" do
-      opened_vacancies[0].country = 'Uk'
-      opened_vacancies[0].save!
-      params[:country] = "Uk"
+    it "return the list of vacancies if params[:country] is passed" do
+      params["country"] = searched_vacancy.country
       expect(
         VacancySearch.new(params: params).call
-        ).to match_array(Vacancy.where(params))
+        ).to match_array([searched_vacancy])
     end
 
-    it "return the list of vacancies if params[:search][:city] is passed" do
-      opened_vacancies[0].city = 'Dnepr'
-      opened_vacancies[0].save!
-      params[:city] = "Dnepr"
+    it "return the list of vacancies if params[:city] is passed" do
+      params["city"] = searched_vacancy.city
       expect(
         VacancySearch.new(params: params).call
-        ).to match_array(Vacancy.where(:city => params[:city]))
+        ).to match_array([searched_vacancy])
     end
 
-    it "return the list of vacancies if params[:search][:company_id] is passed" do
-      params[:company_id] = company.id
+    it "return the list of vacancies if params[:speciality_id] is passed" do
+      params["speciality_id"] = searched_vacancy.speciality_id
       expect(
         VacancySearch.new(params: params).call
-        ).to match_array(Vacancy.where(:company_id => params[:company_id]))
+        ).to match_array([searched_vacancy])
     end
 
-    it "return the list of vacancies if params[:search][:speciality_id] is passed" do
-      opened_vacancies[0].speciality_id = 1
-      params[:speciality_id] = 1
-      expect(
-        VacancySearch.new(params: params).call
-        ).to match_array(Vacancy.where(params))
+    context "by search" do
+      it "return list of vacancies if params[:search] is set a as few characters of city" do
+        params["search"] = searched_vacancy.city
+        params["search"].slice! 0
+        expect(
+          VacancySearch.new(params: params).call
+          ).to match_array([searched_vacancy])
+      end
+
+      it "return list of vacancies if params[:search] is set a as few characters of company's name" do
+        params["search"] = searched_vacancy.company.name
+        params["search"].slice! 0
+        expect(
+          VacancySearch.new(params: params).call
+          ).to match_array([searched_vacancy])
+      end
+
+      it "return list of vacancies if params[:search] is set a as few characters of speciality" do
+        params["search"] = searched_vacancy.speciality.name
+        params["search"].slice! 0
+        expect(
+          VacancySearch.new(params: params).call
+          ).to match_array([searched_vacancy])
+      end
+
+
     end
   end
 end

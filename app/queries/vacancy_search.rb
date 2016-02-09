@@ -3,20 +3,22 @@ class VacancySearch
   include ActiveModel::Model
   include Virtus.model
 
-  attr_reader :country, :state, :city, :company_id
   attribute :params, Hash
   attribute :vacancies, ActiveRecord::Relation, :default => :default_vacancies
-  attribute :country, String, :default => :default_country
-  attribute :state, String, :default => :default_state
-  attribute :city, String, :default => :default_city
-  attribute :company_id, String, :default => :default_company_id
-  attribute :speciality_id, String, :default => :default_speciality_id
+
   def call
-    by_country
-    by_city
-    by_company
-    by_speciality
-    @vacancies
+    case
+    when @params["search"]
+      by_search @params["search"]
+    when @params["country"]
+      by_country
+    when @params["city"]
+      by_city
+    when @params["speciality_id"]
+      by_speciality
+    else
+      @vacancies
+    end
   end
 
   private
@@ -25,42 +27,25 @@ class VacancySearch
     Vacancy.unscoped.all
   end
 
-  def default_country
-    @params[:country]
-  end
 
-  def default_city
-    @params[:city]
-  end
-
-  def default_company_id
-    @params[:company_id]
-  end
-
-  def default_speciality_id
-    @params[:speciality_id]
-  end
-  def by_country
-    if country && !country.empty?
-      @vacancies = @vacancies.where("country = ?", country)
-    end
+  def by_search query
+    query.downcase!
+    @vacancies = @vacancies.joins(:company, :speciality)
+      .where('lower(vacancies.city) LIKE :search OR
+              lower(companies.name) LIKE :search OR
+              lower(specialities.name) LIKE :search', search: "%#{query}%")
   end
 
   def by_city
-    if city && !city.empty?
-      @vacancies = @vacancies.where("city = ?", city)
-    end
+    @vacancies = @vacancies.where("city = ?", @params["city"])
+  end
+  def by_country
+    @vacancies = @vacancies.where("country = ?", @params["country"])
   end
 
-  def by_company
-    if company_id && !company_id.empty?
-      @vacancies = @vacancies.where("company_id = ?", company_id)
-    end
-  end
 
   def by_speciality
-    if speciality_id && !speciality_id.empty?
-      @vacancies = @vacancies.where("speciality_id = ?", speciality_id)
-    end
+    @vacancies = @vacancies.where("speciality_id = ?", @params["speciality_id"])
   end
 end
+

@@ -1,0 +1,26 @@
+.col-sm-6.col-md-5.col-md-offset-2
+  .col-md-offset-2
+    %h1 #{@company.name}
+    %p #{@company.description}
+  - @vacancies.each do |vacancy|
+    .panel.panel-info
+      .panel-heading.col-md-12
+        .panel-title
+        %span.pull-left{:style => "font-size: 30px"}
+          = link_to vacancy.title.humanize, vacancy
+        %span.pull-right
+          %b.text-danger #{vacancy.deadline}
+        %br
+        .clearfix
+        .col-md-4
+          %b Country:
+          = link_to CS.countries[vacancy.country.upcase.to_sym], vacancies_path(:country => vacancy.country)
+        .col-md-4
+          %b City:
+          = link_to vacancy.city, vacancies_path(:city => vacancy.city)
+        .col-md-4
+          %b Company:
+          = link_to vacancy.company.name, @company
+      .panel-body
+  .col-md-8.col-md-offset-3
+    = paginate @vacancies

@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     get 'archived', on: :collection
   end
 
-  resources :companies, only: [] do
+  resources :companies, only: [:show] do
     resources :vacancies, except: :index, shallow: true do
       post 'attach_resume', on: :member
     end

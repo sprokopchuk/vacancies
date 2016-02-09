@@ -5,7 +5,7 @@ class VacanciesController < ApplicationController
   before_action :specialities, except: [:create, :update, :destroy]
 
   def index
-    @search = VacancySearch.new(params)
+    @search = VacancySearch.new(params: params)
     @vacancies = @search.call.page(params[:page])
   end
 

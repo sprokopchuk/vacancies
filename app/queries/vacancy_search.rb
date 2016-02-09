@@ -13,7 +13,7 @@ class VacancySearch
     when @params["country"]
       by_country
     when @params["city"]
-      by_city
+      by_search @params["city"]
     when @params["speciality_id"]
       by_speciality
     else

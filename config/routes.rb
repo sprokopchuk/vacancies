@@ -4,11 +4,12 @@ Rails.application.routes.draw do
   resources :vacancies, only: :index do
     get 'archived', on: :collection
   end
-  resource :company do
-    resources :build, controller: 'company/build', only: [:show, :update, :create]
+
+  resources :companies, only: [] do
     resources :vacancies, except: :index, shallow: true do
       post 'attach_resume', on: :member
     end
+    resources :build, controller: 'companies/build', only: [:show, :update]
   end
   resource :job_list, only: :show
 end

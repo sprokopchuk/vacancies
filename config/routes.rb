@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   root "vacancies#index"
   devise_for :users, :controllers => { :registrations => "registrations" }
+  resources :users, only: [:show] do
+    get 'download_resume', on: :member
+  end
   resources :vacancies, only: :index do
     get 'archived', on: :collection
   end

@@ -25,6 +25,8 @@
             - if user_signed_in?
               %li.navbar-text
                 %b Hello, #{current_user.role.to_s.humanize}!
+              %li
+                = link_to "My profile", user_path(current_user)
               - if current_user.role? :employer
                 %li
                   = link_to "My company", company_path(current_user.company)

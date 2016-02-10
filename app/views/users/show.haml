@@ -1,0 +1,39 @@
+.col-sm-6.col-md-5.col-md-offset-2
+  %h2.col-md-offset-2 User's profile
+  .panel.panel-info
+  .panel-heading
+    %h3.panel-title
+      = @user.first_name + " " + @user.last_name
+  .panel-body
+    .row
+      .col-md-3.col-lg-3{:align => "center"}
+        %img.img-circle.img-responsive{:alt => "User Pic", :src => "/user_avatar.png"}
+      .col-md-9.col-lg-9
+        %table.table.table-user-information
+          %tbody
+            %tr
+              %td City:
+              %td #{@user.city}
+            %tr
+              %td Country:
+              %td #{@user.get_country}
+            %tr
+              %td Role
+              %td #{@user.role.capitalize}
+            %tr
+              - if @user.current? current_user.id
+                %tr
+                  %td Email
+                  %td
+                    %a{:href => "mailto:#{@user.email}"} #{@user.email}
+              - if @user.role? :applicant
+                %td Resume
+                %td
+                  = link_to "Download", download_resume_user_path(@user)
+              - else
+                %td Company
+                %td #{@user.company.name}
+        %a.btn.btn-primary{:href => "#"} My Sales Performance
+        %a.btn.btn-primary{:href => "#"} Team Sales Performance
+  .panel-footer
+

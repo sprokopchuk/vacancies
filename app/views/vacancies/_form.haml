@@ -11,6 +11,9 @@
       = f.label "Deadline"
       %br/
       = f.date_field :deadline, min: Date.today, class: "form-control", placeholder: "Deadline"
+      = f.label "Speciality"
+      %br/
+      =f.select :speciality_id, Speciality.all.collect{|s| [ s.name, s.id ] }, {prompt: "Choose a speciality"}, {class: "form-control"}
       = f.label "Description"
       %br/
       .input-group

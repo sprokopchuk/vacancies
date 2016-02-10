@@ -16,8 +16,20 @@ class User < ActiveRecord::Base
     self.role.to_sym == role if self.role
   end
 
+  def current? id
+    self.id == id
+  end
+
   def active_for_authentication?
     super && approved?
+  end
+
+  def get_country
+    if self.role? :employer
+      CS.countries[self.company.country.upcase.to_sym] if self.company
+    else
+      CS.countries[self.country.upcase.to_sym] if self.country
+    end
   end
 
   def inactive_message
@@ -29,6 +41,7 @@ class User < ActiveRecord::Base
   end
 
   private
+
   def set_approved
     self.approved = true if self.role? :applicant
   end

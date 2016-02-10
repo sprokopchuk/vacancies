@@ -23,6 +23,36 @@ RSpec.describe User, type: :model do
     end
   end
 
+  context "#get_country" do
+    it "return applicant's country if country is set" do
+      subject.country = "US"
+      expect(subject.get_country).to eq CS.countries[subject.country.upcase.to_sym]
+    end
+
+    it "return nil if applicant's country is not set" do
+      expect(subject.get_country).to eq nil
+    end
+
+    it "return employer's country if company is set" do
+      expect(employer.get_country).to eq CS.countries[company.country.upcase.to_sym]
+    end
+
+    it "return nil if employer's company is not set" do
+      employer.company = nil
+      expect(employer.get_country).to eq nil
+    end
+  end
+
+  context "#current?" do
+    it "return true if current user is own page profile" do
+      expect(subject.current? subject.id).to be_truthy
+    end
+
+    it "return false if employer on applicant's page profile" do
+      expect(subject.current? employer.id).to be_falsey
+    end
+  end
+
   context "approved fo users" do
 
     it "approved if user is applicant" do

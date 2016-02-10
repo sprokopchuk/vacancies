@@ -7,6 +7,7 @@ RSpec.describe Ability, type: :model do
   let(:vacancy) {FactoryGirl.create :vacancy, company: company}
   let(:other_vacancy) {FactoryGirl.create :vacancy}
   let(:applicant_user) {FactoryGirl.create :user}
+  let(:other_applicant_user) {FactoryGirl.create :user}
   describe "abilities for employer" do
     subject{Ability.new(employer_user)}
     context "for vacancies" do
@@ -55,6 +56,21 @@ RSpec.describe Ability, type: :model do
         it {expect(subject).to be_able_to(:destroy, company)}
       end
     end
+
+    context "for users" do
+      it "can download resume if employer is approved" do
+        employer_user.update(:approved => true)
+        expect(subject).to be_able_to(:download_resume, applicant_user)
+      end
+      it "can't download resume if employer is not approved" do
+        expect(subject).not_to be_able_to(:download_resume, applicant_user)
+      end
+
+      it "can read user's resume if employer is approved" do
+        employer_user.update(:approved => true)
+        expect(subject).to be_able_to(:read, applicant_user)
+      end
+    end
   end
 
   describe "abilities for applicant" do
@@ -74,6 +90,13 @@ RSpec.describe Ability, type: :model do
       it {expect(subject).not_to be_able_to(:destroy, company)}
 
     end
+
+    context "for users" do
+      it {expect(subject).to be_able_to(:read, applicant_user)}
+      it {expect(subject).not_to be_able_to(:read, other_applicant_user)}
+      it {expect(subject).to be_able_to(:download_resume, applicant_user)}
+      it {expect(subject).not_to be_able_to(:download_resume, other_applicant_user)}
+    end
   end
 
   describe "abilities for guests" do
@@ -91,6 +114,11 @@ RSpec.describe Ability, type: :model do
       it {expect(subject).not_to be_able_to(:create, Company)}
       it {expect(subject).not_to be_able_to(:update, company)}
       it {expect(subject).not_to be_able_to(:destroy, company)}
+    end
+
+    context "for users" do
+      it {expect(subject).not_to be_able_to(:download_resume, applicant_user)}
+      it {expect(subject).not_to be_able_to(:read, applicant_user)}
     end
   end
 end

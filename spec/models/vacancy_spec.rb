@@ -47,16 +47,16 @@ RSpec.describe Vacancy, type: :model do
       expect(authenticated_user.resume_identifier).to eq "logo_image.png"
     end
 
-    it "return a list of users who's attached resume to vacancy" do
+    it "return a user's list of applied jobs which attached resume" do
       expect(
         subject.attach_resume(authenticated_user, authenticated_user.resume.to_s)
-        ).to eq subject.users
+        ).to eq authenticated_user.vacancies
     end
 
     it "change numbers of users are attached resume to vacancy" do
       expect{
         subject.attach_resume(authenticated_user, authenticated_user.resume.to_s)
-        }.to change{subject.users.size}.by(1)
+        }.to change{subject.reload.users.size}.by(1)
     end
   end
 

@@ -35,8 +35,8 @@
                 %th #{i + 1}
                 %td #{user.first_name}
                 %td #{user.last_name}
-                %td
-                  = link_to "Download", download_resume_user_path(user)
+                %td{"data-no-turbolink" => ""}
+                  = link_to "Download", download_resume_user_path(user, vacancy_id: @vacancy)
       .panel-footer
         - if @vacancy.can_applly?(current_user)
           = form_tag attach_resume_vacancy_path, class: "navbar-form" do

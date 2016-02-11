@@ -75,6 +75,11 @@ $(document).on('ready', function() {
     $('#' + ops.city_id).chosen();
   }
   // initialize persistent state
+
+  $('#user_role').on('change', function(){
+    var role = $(this).val();
+    $('#user_speciality').toggle();
+  });
 });
 
 

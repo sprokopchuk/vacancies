@@ -21,6 +21,9 @@
               %td Role
               %td #{@user.role.capitalize}
             %tr
+              %td Speciality
+              %td #{@user.get_speciality}
+            %tr
               - if @user.current? current_user.id
                 %tr
                   %td Email
@@ -28,12 +31,10 @@
                     %a{:href => "mailto:#{@user.email}"} #{@user.email}
               - if @user.role? :applicant
                 %td Resume
-                %td
+                %td{"data-no-turbolink" => ""}
                   = link_to "Download", download_resume_user_path(@user)
               - else
                 %td Company
                 %td #{@user.company.name}
-        %a.btn.btn-primary{:href => "#"} My Sales Performance
-        %a.btn.btn-primary{:href => "#"} Team Sales Performance
   .panel-footer
 

@@ -11,10 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160205091039) do
+ActiveRecord::Schema.define(version: 20160211081628) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "applied_jobs", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "vacancy_id"
+    t.boolean  "viewed",     default: false
+    t.boolean  "rejected",   default: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  add_index "applied_jobs", ["user_id", "vacancy_id"], name: "index_applied_jobs_on_user_id_and_vacancy_id", unique: true, using: :btree
+  add_index "applied_jobs", ["vacancy_id", "user_id"], name: "index_applied_jobs_on_vacancy_id_and_user_id", unique: true, using: :btree
 
   create_table "companies", force: :cascade do |t|
     t.string   "name"
@@ -63,11 +75,6 @@ ActiveRecord::Schema.define(version: 20160205091039) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["speciality_id"], name: "index_users_on_speciality_id", using: :btree
-
-  create_table "users_vacancies", id: false, force: :cascade do |t|
-    t.integer "vacancy_id"
-    t.integer "user_id"
-  end
 
   create_table "vacancies", force: :cascade do |t|
     t.string   "title"

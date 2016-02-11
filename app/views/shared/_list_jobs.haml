@@ -4,7 +4,14 @@
       .panel-title
       %span.pull-left{:style => "font-size: 30px"}
         = link_to vacancy.title.humanize, vacancy
-      %span.pull-right
+      - if user_signed_in?
+        - if current_user.resume_viewed?(vacancy.id)
+          %span.pull-right
+            .glyphicon.glyphicon-eye-open.text-success
+        - elsif current_user.vacancies.exists?(vacancy.id)
+          %span.pull-right
+            .glyphicon.glyphicon-eye-close.text-warning
+      %span.pull-right{:style => "margin: 0 30px"}
         %b.text-danger #{vacancy.deadline}
       %br
       .clearfix

@@ -9,13 +9,32 @@ class User < ActiveRecord::Base
   validates :first_name, :last_name, presence: true
   belongs_to :speciality
   before_create :set_approved
-  has_and_belongs_to_many :vacancies
+  has_many :applied_jobs
+  has_many :vacancies, :through => :applied_jobs
+
+
   has_one :company
 
   def role?(role)
     self.role.to_sym == role if self.role
   end
 
+  def toggle_viewed vacancy_id
+    applied_job = self.applied_jobs.where(:vacancy_id => vacancy_id).take
+    applied_job.toggle! :viewed
+  end
+
+  def resume_viewed? vacancy_id
+    if self.vacancies.exists?(vacancy_id)
+      applied_job = self.applied_jobs.where(:vacancy_id => vacancy_id).take
+      applied_job.viewed?
+    end
+  end
+
+
+  def get_speciality
+    self.speciality.name.capitalize if self.speciality
+  end
   def current? id
     self.id == id
   end

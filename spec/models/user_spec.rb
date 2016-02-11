@@ -4,6 +4,8 @@ RSpec.describe User, type: :model do
   subject{FactoryGirl.create :user}
   let(:company) {FactoryGirl.create :company}
   let(:employer) {FactoryGirl.create :employer, company: company}
+  let(:vacancy) {FactoryGirl.create :vacancy}
+  let(:applied_job) {FactoryGirl.create :applied_job, :user => subject, vacancy: vacancy}
   it {expect(subject).to validate_presence_of(:first_name)}
   it {expect(subject).to validate_presence_of(:last_name)}
   it {expect(subject).to belong_to(:speciality)}
@@ -40,6 +42,28 @@ RSpec.describe User, type: :model do
     it "return nil if employer's company is not set" do
       employer.company = nil
       expect(employer.get_country).to eq nil
+    end
+  end
+
+
+  context "#toggle_viewed" do
+    it "toogle attribute :viewed from false into true for applied job" do
+      applied_job
+      expect{
+        subject.toggle_viewed vacancy.id
+        }.to change{applied_job.reload.viewed}.from(false).to(true)
+    end
+  end
+
+  context "#resume_viewed?" do
+    it "return true if resume to applied job is viewed by employer" do
+      applied_job
+      subject.toggle_viewed vacancy.id
+      expect(subject.resume_viewed? vacancy.id).to be_truthy
+    end
+
+    it "return false if resume to applied job is not viewed by employer" do
+      expect(subject.resume_viewed? vacancy.id).to be_falsey
     end
   end
 

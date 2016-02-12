@@ -19,7 +19,7 @@
           = link_to @vacancy.company.name, vacancies_path(:company_id => @vacancy.company.id)
       .panel-body
         = @vacancy.description
-        - if @vacancy.users.any? && current_user.current?(@vacancy.company.user_id)
+        - if user_signed_in? && @vacancy.users.any? && current_user.current?(@vacancy.company.user_id)
           %br/
           %h2.col-md-offset-3 Applied resumes
           %table.table

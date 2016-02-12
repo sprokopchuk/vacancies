@@ -15,6 +15,7 @@ FactoryGirl.define do
     end
 
     factory :manager do
+      invite_code {FactoryGirl.create(:invite_code).code}
       role "manager"
     end
     factory :admin do

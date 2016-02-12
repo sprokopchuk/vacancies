@@ -35,6 +35,17 @@ RSpec.describe User, type: :model do
     end
   end
 
+  context "#get_owner_of_invite_code" do
+    it "return nil for user who is not manager" do
+      expect(subject.get_owner_of_invite_code).to eq nil
+    end
+
+    it "return employer user for manager" do
+      invite_code.update(:user_id => employer.id)
+      manager.save
+      expect(manager.get_owner_of_invite_code).to eq(employer)
+    end
+  end
   context "#get_country" do
     it "return applicant's country if country is set" do
       subject.country = "US"

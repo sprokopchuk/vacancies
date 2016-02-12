@@ -43,6 +43,10 @@ class User < ActiveRecord::Base
     self.id == id
   end
 
+  def get_owner_of_invite_code
+    InviteCode.where(code: self.invite_code).take.user if self.role?(:manager)
+  end
+
   def active_for_authentication?
     super && approved?
   end

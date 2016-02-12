@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
 
   mount_uploader :resume, AttachmentUploader
   validates :first_name, :last_name, presence: true
+  validates :invite_code, on: :create, presence: true,
+             inclusion: { in: Proc.new{ InviteCode.where( used: false ).map( &:code ) } }, if: Proc.new{|u| u.role? :manager}
   belongs_to :speciality
   before_create :set_approved
   has_many :applied_jobs
@@ -64,7 +66,9 @@ class User < ActiveRecord::Base
   private
 
   def set_approved
-    self.approved = true if self.role? :applicant
+    if self.role?(:applicant) || self.role?(:manager)
+      self.approved = true
+    end
   end
 
 

@@ -14,6 +14,9 @@ FactoryGirl.define do
       role "employer"
     end
 
+    factory :manager do
+      role "manager"
+    end
     factory :admin do
       role "admin"
     end

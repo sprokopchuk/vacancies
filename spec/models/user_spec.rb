@@ -6,11 +6,20 @@ RSpec.describe User, type: :model do
   let(:employer) {FactoryGirl.create :employer, company: company}
   let(:vacancy) {FactoryGirl.create :vacancy}
   let(:applied_job) {FactoryGirl.create :applied_job, :user => subject, vacancy: vacancy}
+  let(:manager) {FactoryGirl.build :manager, invite_code: invite_code.code}
   let(:invite_code) {FactoryGirl.create :invite_code}
   it {expect(subject).to validate_presence_of(:first_name)}
   it {expect(subject).to validate_presence_of(:last_name)}
   it {expect(subject).to belong_to(:speciality)}
   it {expect(subject).not_to validate_presence_of(:company)}
+
+  context "if check_invite_code?" do
+    it {expect(manager).to validate_presence_of(:invite_code)}
+  end
+
+  context "unless check_invite_code?" do
+    it {expect(FactoryGirl.build(:user)).not_to validate_presence_of(:invite_code)}
+  end
 
   context "#role?" do
     it "return true if user is applicant" do

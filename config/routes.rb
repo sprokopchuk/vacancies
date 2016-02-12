@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     get 'archived', on: :collection
   end
 
+  resources :invite_codes, only: [:index, :create]
   resources :companies, only: [:show] do
     resources :vacancies, except: :index, shallow: true do
       post 'close', on: :member

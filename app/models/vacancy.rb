@@ -4,6 +4,7 @@ class Vacancy < ActiveRecord::Base
   belongs_to :speciality
   has_many :applied_jobs
   has_many :users, :through => :applied_jobs
+  before_validation :set_city_and_country
 
   default_scope -> {where("deadline > ?", Date.current)}
   scope :archived, -> {unscoped.where("deadline < ?", Date.current)}
@@ -25,6 +26,11 @@ class Vacancy < ActiveRecord::Base
     self.deadline > Date.current &&
     user.role?(:applicant) &&
     !self.users.exists?(user.id)
+  end
+
+  def set_city_and_country
+    self.city = self.company.city
+    self.country = self.company.country
   end
 
 end

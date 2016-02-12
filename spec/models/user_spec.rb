@@ -83,6 +83,10 @@ RSpec.describe User, type: :model do
         employer.generate_invite_code
         }.to change{InviteCode.count}.by(1)
     end
+
+    it "generate invite code for employer" do
+      expect(employer.generate_invite_code).to eq(employer.invite_codes.first)
+    end
   end
   context "#current?" do
     it "return true if current user is own page profile" do

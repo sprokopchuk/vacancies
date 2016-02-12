@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
   end
 
   def generate_invite_code
-    InviteCode.create(code: SecureRandom.uuid) if self.role?(:employer)
+    self.invite_codes.create(code: SecureRandom.uuid) if self.role?(:employer)
   end
   def get_speciality
     self.speciality.name.capitalize if self.speciality

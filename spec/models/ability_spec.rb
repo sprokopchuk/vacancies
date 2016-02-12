@@ -3,13 +3,14 @@ require 'rails_helper'
 RSpec.describe Ability, type: :model do
   let(:admin) {FactoryGirl.create :admin}
   let(:employer_user) {FactoryGirl.create :employer}
+  let(:manager) {FactoryGirl.create :manager}
   let(:company) {FactoryGirl.create :company, user: employer_user}
   let(:other_company) {FactoryGirl.create :company}
   let(:vacancy) {FactoryGirl.create :vacancy, company: company}
   let(:other_vacancy) {FactoryGirl.create :vacancy}
   let(:applicant_user) {FactoryGirl.create :user}
   let(:other_applicant_user) {FactoryGirl.create :user}
-
+  let(:invite_codes) {FactoryGirl.create :invite_code, user: employer_user}
   describe "abilities for admin" do
     subject {Ability.new(admin)}
 
@@ -26,6 +27,30 @@ RSpec.describe Ability, type: :model do
     end
   end
 
+  describe "abilities for manager" do
+    subject{Ability.new(manager)}
+
+    context "for vacancies" do
+      before do
+        manager.update invite_code: FactoryGirl.create(:invite_code, user: employer_user).code
+      end
+      it {expect(subject).to be_able_to(:read, vacancy)}
+      it {expect(subject).to be_able_to(:close, vacancy)}
+      it {expect(subject).to be_able_to(:create, Vacancy)}
+      it {expect(subject).not_to be_able_to(:close, other_vacancy)}
+    end
+
+    context "for companies" do
+      it {expect(subject).to be_able_to(:read, other_company)}
+      it {expect(subject).not_to be_able_to(:update, company)}
+      it {expect(subject).not_to be_able_to(:create, Company)}
+    end
+
+    context "for users" do
+      it {expect(subject).to be_able_to(:read, applicant_user)}
+      it {expect(subject).to be_able_to(:download_resume, applicant_user)}
+    end
+  end
   describe "abilities for employer" do
     subject{Ability.new(employer_user)}
     context "for vacancies" do
@@ -80,6 +105,15 @@ RSpec.describe Ability, type: :model do
         employer_user.update(:approved => true)
         expect(subject).to be_able_to(:read, applicant_user)
       end
+    end
+
+    context "for invite codes" do
+      before do
+        employer_user.update(:approved => true)
+      end
+      it {expect(subject).to be_able_to(:read, invite_codes)}
+      it {expect(subject).to be_able_to(:create, InviteCode)}
+      it {expect(subject).not_to be_able_to(:read, FactoryGirl.create(:invite_code))}
     end
   end
 

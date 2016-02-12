@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160211081628) do
+ActiveRecord::Schema.define(version: 20160212082603) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,14 @@ ActiveRecord::Schema.define(version: 20160211081628) do
     t.string   "status",      default: "inactive"
   end
 
+  create_table "invite_codes", force: :cascade do |t|
+    t.boolean  "used",       default: false
+    t.string   "code"
+    t.integer  "user_id"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
   create_table "specialities", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
@@ -68,6 +76,7 @@ ActiveRecord::Schema.define(version: 20160211081628) do
     t.string   "resume"
     t.string   "role"
     t.boolean  "approved",               default: false, null: false
+    t.string   "invite_code"
   end
 
   add_index "users", ["approved"], name: "index_users_on_approved", using: :btree

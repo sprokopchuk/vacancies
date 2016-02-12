@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
   has_many :applied_jobs
   has_many :vacancies, :through => :applied_jobs
   has_many :invite_codes
+  after_create :inactive_invite_code, if: Proc.new { self.role? :manager}
 
   has_one :company
 
@@ -51,9 +52,21 @@ class User < ActiveRecord::Base
     super && approved?
   end
 
+  def get_city
+    if self.role? :employer
+      self.company.city
+    elsif self.role? :manager
+      self.get_owner_of_invite_code.company.city
+    else
+      self.city
+    end
+  end
+
   def get_country
     if self.role? :employer
-      CS.countries[self.company.country.upcase.to_sym] if self.company
+      CS.countries[self.company.country.upcase.to_sym]
+    elsif self.role? :manager
+      CS.countries[self.get_owner_of_invite_code.company.country.upcase.to_sym]
     else
       CS.countries[self.country.upcase.to_sym] if self.country
     end
@@ -67,8 +80,16 @@ class User < ActiveRecord::Base
     end
   end
 
+  def full_name
+    if self.first_name || self.last_name
+      self.first_name + " " + self.last_name
+    end
+  end
   private
 
+  def inactive_invite_code
+    InviteCode.where(code: self.invite_code).take.update used: true
+  end
   def set_approved
     if self.role?(:applicant) || self.role?(:manager)
       self.approved = true

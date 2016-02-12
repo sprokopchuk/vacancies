@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable #:trackable,
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-  ROLES = %i[admin employer applicant]
+  ROLES = %i[admin employer manager applicant]
 
   mount_uploader :resume, AttachmentUploader
   validates :first_name, :last_name, presence: true
@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   before_create :set_approved
   has_many :applied_jobs
   has_many :vacancies, :through => :applied_jobs
-
+  has_many :invite_codes
 
   has_one :company
 
@@ -31,7 +31,9 @@ class User < ActiveRecord::Base
     end
   end
 
-
+  def generate_invite_code
+    InviteCode.create(code: SecureRandom.uuid) if self.role?(:employer)
+  end
   def get_speciality
     self.speciality.name.capitalize if self.speciality
   end

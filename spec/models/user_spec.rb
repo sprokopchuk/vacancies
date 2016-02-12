@@ -6,6 +6,7 @@ RSpec.describe User, type: :model do
   let(:employer) {FactoryGirl.create :employer, company: company}
   let(:vacancy) {FactoryGirl.create :vacancy}
   let(:applied_job) {FactoryGirl.create :applied_job, :user => subject, vacancy: vacancy}
+  let(:invite_code) {FactoryGirl.create :invite_code}
   it {expect(subject).to validate_presence_of(:first_name)}
   it {expect(subject).to validate_presence_of(:last_name)}
   it {expect(subject).to belong_to(:speciality)}
@@ -67,6 +68,22 @@ RSpec.describe User, type: :model do
     end
   end
 
+
+  context "#generate_invite_code" do
+    it "return nil if user is applicant" do
+      expect(subject.generate_invite_code).to eq nil
+    end
+
+    it "return generated invite code if user is employer" do
+      expect(employer.generate_invite_code).to eq InviteCode.first
+    end
+
+    it "change number of invite codes in db" do
+      expect{
+        employer.generate_invite_code
+        }.to change{InviteCode.count}.by(1)
+    end
+  end
   context "#current?" do
     it "return true if current user is own page profile" do
       expect(subject.current? subject.id).to be_truthy

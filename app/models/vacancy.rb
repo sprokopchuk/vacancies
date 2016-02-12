@@ -16,6 +16,10 @@ class Vacancy < ActiveRecord::Base
     end
   end
 
+  def close
+    self.update deadline: (Date.current - 1)
+  end
+
   def can_applly? user
     user &&
     self.deadline > Date.current &&

@@ -32,6 +32,20 @@ RSpec.describe Vacancy, type: :model do
     end
   end
 
+  context "#close" do
+    it "return true while putting vacancy into archive" do
+      expect(subject.close).to be_truthy
+    end
+
+    it "change date of deadline" do
+      expect{subject.close}.to change{subject.deadline}
+    end
+
+    it "put vacancy into archive" do
+      subject.close
+      expect(Vacancy.all).to match_array([])
+    end
+  end
   context "#attach_resume" do
     it "return nil if resume already is attached to vacancy" do
       subject.attach_resume(authenticated_user, authenticated_user.resume.to_s)
@@ -70,10 +84,10 @@ RSpec.describe Vacancy, type: :model do
     end
 
     it "return false if user is not sign in" do
-      expect(opened_vacancies[0].can_applly? nil).to be_falsey
+      expect(subject.can_applly? nil).to be_falsey
     end
     it "return true if vacancy is opened" do
-      expect(opened_vacancies[0].can_applly? authenticated_user).to be_truthy
+      expect(subject.can_applly? authenticated_user).to be_truthy
     end
 
     it "return false if user is already applied resume to vacancy" do

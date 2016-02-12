@@ -1,0 +1,36 @@
+.col-md-6.col-md-offset-2
+  %h1.col-md-offset-2 Invite codes
+  = link_to "Generate an new invite code", invite_codes_path, method: :post, class: "btn bg-info pull-right"
+  %br/
+  - if @invite_codes.any?
+    %table.table.table-striped.table-condensed
+      %thead
+        %tr
+          %th Code
+          %th Date used
+          %th User registered
+          %th Email
+          %th Status
+      %tbody
+        - @invite_codes.each do |invite|
+          - user = invite.get_user_used_invite
+          %tr
+            %td #{invite.code}
+            - if user
+              %td #{user.created_at.strftime('%d.%m.%Y')}
+              %td #{user.full_name}
+              %td #{user.email}
+            - else
+              %td -
+              %td -
+              %td -
+            - if invite.used?
+              %td
+                %span.label.label-danger Used
+            - else
+              %td
+                %span.label.label-success Active
+  - else
+    %br
+    .alert.alert-warning.fade.in
+      You don't have any invites

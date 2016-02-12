@@ -32,27 +32,6 @@ RSpec.describe VacanciesController, type: :controller do
     end
   end
 
-  describe "GET #edit" do
-
-    before do
-      allow(company).to receive_message_chain(:vacancies, :find).and_return vacancy
-    end
-    it "renders :edit template" do
-      get :edit, company_id: company.id, id: vacancy.id
-      expect(response).to render_template :edit
-    end
-    context "without abilitties to edit" do
-      before do
-        ability.cannot :update, vacancy
-      end
-
-      it "redirects to root_path" do
-        get :edit, id: vacancy.id
-        expect(response).to redirect_to(root_path)
-      end
-    end
-  end
-
   describe "GET #index" do
     before do
       allow(Vacancy).to receive(:all).and_return [vacancy]
@@ -97,66 +76,6 @@ RSpec.describe VacanciesController, type: :controller do
     end
   end
 
-  describe "PUT #update" do
-    before do
-      allow(company).to receive_message_chain(:vacancies, :find).and_return vacancy
-    end
-    it "receives update with vacancy_params for @vacancy" do
-      expect(vacancy).to receive(:update).with(vacancy_params)
-      put :update, company_id: company.id, id: vacancy.id, vacancy: vacancy_params
-    end
-
-    it "sends success message when update vacancy a is successfull" do
-      allow(vacancy).to receive(:update).and_return true
-      put :update, company_id: company.id, id: vacancy.id, vacancy: vacancy_params
-      expect(flash[:notice]).to eq 'Vacancy was successfully updated.'
-    end
-
-    it "renders :edit template when update vacancy a is fails" do
-      allow(vacancy).to receive(:update).and_return false
-      put :update, company_id: company.id, id: vacancy.id, vacancy: vacancy_params
-      expect(response).to render_template :edit
-    end
-
-    context "without abilities to update" do
-      before do
-        ability.cannot :update, vacancy
-      end
-
-      it "redirect to root_path" do
-        put :update, company_id: company.id, id: vacancy.id, vacancy: vacancy_params
-        expect(response).to redirect_to(root_path)
-      end
-    end
-  end
-
-  describe "DELETE #destroy" do
-    before do
-      allow(company).to receive_message_chain(:vacancies, :find).and_return vacancy
-    end
-    it "receives destroy with no params for @vacancy" do
-      expect(vacancy).to receive(:destroy)
-      delete :destroy, company_id: company.id, id: vacancy.id
-    end
-
-    it "redirects to vacancies_path when vacancy is destroyed" do
-      allow(vacancy).to receive(:destroy).and_return true
-      delete :destroy, company_id: company.id, id: vacancy.id
-      expect(response).to redirect_to vacancies_path
-    end
-
-    context "without abilities to destroy" do
-      before do
-        ability.cannot :destroy, vacancy
-      end
-
-      it "redirect to root_path" do
-        delete :destroy, company_id: company.id, id: vacancy.id
-        expect(response).to redirect_to(root_path)
-      end
-    end
-  end
-
   describe "POST #attach_resume" do
     before do
       allow(Vacancy).to receive_message_chain(:unscoped, :find).and_return vacancy
@@ -190,5 +109,41 @@ RSpec.describe VacanciesController, type: :controller do
         expect(response).to redirect_to(root_path)
       end
     end
+  end
+
+  describe "POST #close" do
+    before do
+      allow(company).to receive_message_chain(:vacancies, :find).and_return vacancy
+      allow(vacancy).to receive(:close).and_return true
+    end
+
+    it "receives close" do
+      expect(vacancy).to receive(:close)
+      post :close, id: vacancy.id, company_id: company.id
+    end
+
+    it "sends a succeful message when vacancy is closed" do
+      post :close, id: vacancy.id, company_id: company.id
+      expect(flash[:notice]).to eq "Vacancy is closed"
+    end
+
+    it "sends a failure message when vacancy is not closed" do
+      allow(vacancy).to receive(:close).and_return false
+      post :close, id: vacancy.id, company_id: company.id
+      expect(flash[:alert]).to eq "Something is wrong. Vacancy is not closed"
+    end
+
+    context "without abilities to close a vacancy" do
+      before do
+        ability.cannot :close, vacancy
+      end
+
+      it "redirects to root_path" do
+        post :close, id: vacancy.id, company_id: company.id
+        expect(response).to redirect_to(root_path)
+      end
+    end
+
+
   end
 end

@@ -95,17 +95,7 @@ RSpec.describe User, type: :model do
     end
 
     it "return generated invite code if user is employer" do
-      expect(employer.generate_invite_code).to eq InviteCode.first
-    end
-
-    it "change number of invite codes in db" do
-      expect{
-        employer.generate_invite_code
-        }.to change{InviteCode.count}.by(1)
-    end
-
-    it "generate invite code for employer" do
-      expect(employer.generate_invite_code).to eq(employer.invite_codes.first)
+      expect(employer.generate_invite_code.class).to eq(String)
     end
   end
   context "#current?" do

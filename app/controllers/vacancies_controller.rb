@@ -17,10 +17,6 @@ class VacanciesController < ApplicationController
   def new
   end
 
-  def edit
-  end
-
-
   def archived
     @vacancies = Vacancy.archived.page(params[:page])
   end
@@ -33,17 +29,12 @@ class VacanciesController < ApplicationController
     end
   end
 
-  def update
-    if @vacancy.update(vacancy_params)
-      redirect_to @vacancy, notice: 'Vacancy was successfully updated.'
+  def close
+    if @vacancy.close
+      redirect_to :back, notice: "Vacancy is closed"
     else
-      render :edit
+      redirect_to :back, alert: "Something is wrong. Vacancy is not closed"
     end
-  end
-
-  def destroy
-    @vacancy.destroy
-    redirect_to vacancies_path, notice: 'Vacancy was successfully destroyed.'
   end
 
   def attach_resume

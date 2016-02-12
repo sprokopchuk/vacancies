@@ -29,9 +29,16 @@
                 = link_to "My profile", user_path(current_user)
               - if current_user.role? :employer
                 %li
+                  = link_to "Invite codes", invite_codes_path
+                %li
                   = link_to "My company", company_path(current_user.company)
                 %li
                   = link_to "Post a vacancy", new_company_vacancy_path(:company_id => current_user.company.id)
+              - elsif current_user.role? :manager
+                %li
+                  = link_to "My company", company_path(current_user.get_owner_of_invite_code.company)
+                %li
+                  = link_to "Post a vacancy", new_company_vacancy_path(:company_id => current_user.get_owner_of_invite_code.company.id)
               - else
                 %li{:class => active_class(job_list_path)}
                   = link_to "Job List", job_list_path

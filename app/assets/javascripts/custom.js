@@ -4,7 +4,7 @@ var ops = {
   city_id:    "company_city"
 }
 
-$(document).on('ready', function() {
+$(document).on('ready page:load', function() {
 
   CountryStateSelect({
     chosen_ui: true,
@@ -78,7 +78,18 @@ $(document).on('ready', function() {
 
   $('#user_role').on('change', function(){
     var role = $(this).val();
-    $('#user_speciality').toggle();
+    var speciality = $('#user_speciality');
+    var invite_code = $("#user_invite_code");
+    if(role == "applicant"){
+      invite_code.hide();
+      speciality.show();
+    }else if(role == "manager"){
+      speciality.hide();
+      invite_code.show();
+    }else{
+      speciality.hide();
+      invite_code.hide();
+    }
   });
 });
 

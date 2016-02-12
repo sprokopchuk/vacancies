@@ -8,6 +8,9 @@
       #user_speciality{:style=> "display: none;"}
         = f.label "Speciality"
         = f.collection_select(:speciality_id, Speciality.all, :id, :name, {prompt: "Choose a speciality"}, {class: "form-control"})
+      #user_invite_code{:style=> "display: none;"}
+        = f.label "Invite Code"
+        = f.text_field :invite_code, class: "form-control"
       = f.label I18n.t("settings.edit_info.first_name")
       .input-group.field
         = f.text_field :first_name, class: "form-control", placeholder:  t("settings.edit_info.first_name")

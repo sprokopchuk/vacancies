@@ -25,21 +25,29 @@
             - if user_signed_in?
               %li.navbar-text
                 %b Hello, #{current_user.role.to_s.humanize}!
-              %li
-                = link_to "My profile", user_path(current_user)
-              - if current_user.role? :employer
+              - case
+              - when current_user.role?(:admin)
+                %li
+                  = link_to "Admin panel", rails_admin_path
+              - when current_user.role?(:employer)
+                %li
+                  = link_to "My profile", user_path(current_user)
                 %li
                   = link_to "Invite codes", invite_codes_path
                 %li
                   = link_to "My company", company_path(current_user.company)
                 %li
                   = link_to "Post a vacancy", new_company_vacancy_path(:company_id => current_user.company.id)
-              - elsif current_user.role? :manager
+              - when current_user.role?(:manager)
+                %li
+                  = link_to "My profile", user_path(current_user)
                 %li
                   = link_to "My company", company_path(current_user.get_owner_of_invite_code.company)
                 %li
                   = link_to "Post a vacancy", new_company_vacancy_path(:company_id => current_user.get_owner_of_invite_code.company.id)
               - else
+                %li
+                  = link_to "My profile", user_path(current_user)
                 %li{:class => active_class(job_list_path)}
                   = link_to "Job List", job_list_path
               %li{:class => active_class(edit_user_registration_path(current_user))}

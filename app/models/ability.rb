@@ -6,8 +6,11 @@ class Ability
     user ||= User.new
     case
     when user.role?(:admin)
-      can :read, Vacancy
+      can :access, :rails_admin
+      can :dashboard
+      can [:read, :charts], Vacancy
       can :manage, Company
+      can [:read, :toggle], User
     when user.role?(:employer)
       if user.approved?
         can [:read, :create], InviteCode, :user_id => user.id

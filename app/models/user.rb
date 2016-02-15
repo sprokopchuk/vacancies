@@ -64,7 +64,7 @@ class User < ActiveRecord::Base
 
   def get_country
     if self.role? :employer
-      CS.countries[self.company.country.upcase.to_sym]
+      CS.countries[self.company.country.upcase.to_sym] if self.company
     elsif self.role? :manager
       CS.countries[self.get_owner_of_invite_code.company.country.upcase.to_sym]
     else

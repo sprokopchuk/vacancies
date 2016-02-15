@@ -31,7 +31,7 @@ else
 
   10.times.each do
     FactoryGirl.create :vacancy,
-    company: FactoryGirl.create(:company),
+    company: FactoryGirl.create(:company, user: FactoryGirl.create(:employer, approved: true)),
     speciality: profs[1]
   end
 
@@ -43,7 +43,7 @@ else
 
   10.times.each do
     FactoryGirl.create :vacancy,
-    company: FactoryGirl.create(:company),
+    company: FactoryGirl.create(:company, user: FactoryGirl.create(:employer,  approved: true)),
     speciality: profs[3]
   end
 

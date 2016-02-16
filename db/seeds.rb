@@ -13,6 +13,7 @@ if User.any? || Company.any? || Vacancy.any? || Speciality.any?
   Company.delete_all
   Vacancy.unscoped.delete_all
   Speciality.delete_all
+  InviteCode.delete_all
   puts "All is gone"
 else
    FactoryGirl.create :admin, email: "admin@gmail.com", approved: true
@@ -20,6 +21,9 @@ else
   employer = FactoryGirl.create(:employer, email: "employer@gmail.com", approved: true)
   puts "Create users"
   com = FactoryGirl.create(:company, user: employer)
+  invite_code = FactoryGirl.create(:invite_code, user: employer)
+  FactoryGirl.create(:manager, email: "manager@gmail.com", invite_code: invite_code.code)
+
   puts "Create company"
   profs = FactoryGirl.create_list :speciality, 4
   puts "Create professions"

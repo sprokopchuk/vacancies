@@ -17,8 +17,9 @@ gem 'country_state_select', '~> 3.0', '>= 3.0.1'
 gem 'virtus'
 gem 'wicked'
 gem 'rails_admin'
-gem 'rails_admin_charts'
 gem 'rails_admin_toggleable'
+gem 'chartkick', '~> 1.4', '>= 1.4.1'
+gem 'groupdate'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views

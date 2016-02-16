@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     get 'archived', on: :collection
   end
 
+  resource :chart, controller: "vacancies/charts", only: [:show, :create]
   resources :invite_codes, only: [:index, :create]
   resources :companies, only: [:show] do
     resources :vacancies, except: :index, shallow: true do

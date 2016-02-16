@@ -14,6 +14,7 @@
 //= require bootstrap-sprockets
 //= require jquery_ujs
 //= require turbolinks
+//= require chartkick
 //= require chosen-jquery
 //= require country_state_select
 //= require_tree .

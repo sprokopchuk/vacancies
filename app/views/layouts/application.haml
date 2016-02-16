@@ -3,6 +3,7 @@
   %head
     %title The Job Find
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag "https://code.highcharts.com/highcharts.js", "chartkick"
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
   %body
@@ -29,6 +30,8 @@
               - when current_user.role?(:admin)
                 %li
                   = link_to "Admin panel", rails_admin_path
+                %li
+                  =link_to "Chart", chart_path
               - when current_user.role?(:employer)
                 %li
                   = link_to "My profile", user_path(current_user)

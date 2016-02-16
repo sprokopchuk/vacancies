@@ -8,8 +8,9 @@
         .panel-title
         %span.pull-left{:style => "font-size: 30px"}
           = link_to vacancy.title.humanize, vacancy
-        = link_to close_vacancy_path(vacancy, company_id: vacancy.company_id), method: :post do
-          %span.pull-right.glyphicon.glyphicon-remove
+        - if vacancy.allow_to_close? current_user
+          = link_to close_vacancy_path(vacancy, company_id: vacancy.company_id), method: :post do
+            %span.pull-right.glyphicon.glyphicon-remove
         %span.pull-right{:style => "margin: 0 30px"}
           %b.text-danger #{vacancy.deadline}
         %br

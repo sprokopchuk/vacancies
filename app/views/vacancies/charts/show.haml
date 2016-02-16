@@ -1,0 +1,16 @@
+.col-md-6.col-md-offset-2
+  .col-md-offset-2
+    %h2 The number of jobs in the company during the year
+    = form_for @chart_form, url: chart_path, html: {class: "form-inline"}, remote: true do |f|
+      .form-group
+        = f.label "From"
+        = f.date_field :from, min: Date.current.beginning_of_year, max: Date.current, class: "form-control"
+        = f.label "To"
+        = f.date_field :to, min: Date.current.beginning_of_year, max: Date.current, class: "form-control"
+        = f.select :company, Company.all.collect { |p| [ p.name, p.id ] }, {prompt: "Choose a Company"}, {class: "form-control"}
+        = f.submit "Submit", class: "btn btn-primary"
+  %br
+  .col-md-offset-2#chart_data
+
+
+

@@ -8,7 +8,8 @@ class Ability
     when user.role?(:admin)
       can :access, :rails_admin
       can :dashboard
-      can [:read, :charts], Vacancy
+      can [:read, :create], :chart
+      can :read, Vacancy
       can :manage, Company
       can [:read, :toggle], User
     when user.role?(:employer)

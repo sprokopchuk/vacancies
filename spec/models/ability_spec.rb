@@ -19,7 +19,6 @@ RSpec.describe Ability, type: :model do
       it {expect(subject).not_to be_able_to(:create, Vacancy)}
       it {expect(subject).not_to be_able_to(:close, vacancy)}
       it {expect(subject).not_to be_able_to(:attach_resume, vacancy)}
-      it {expect(subject).to be_able_to(:charts, Vacancy)}
     end
 
     context "for users" do
@@ -29,6 +28,10 @@ RSpec.describe Ability, type: :model do
     context "for companies" do
       it {expect(subject).to be_able_to(:read, company)}
       it {expect(subject).to be_able_to(:update, company)}
+    end
+    context "for charts" do
+      it {expect(subject).to be_able_to(:read, :chart)}
+      it {expect(subject).to be_able_to(:create, :chart)}
     end
   end
 

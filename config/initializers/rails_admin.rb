@@ -78,7 +78,6 @@ RailsAdmin.config do |config|
   end
   config.actions do
     toggle
-    charts
     dashboard                     # mandatory
     index                         # mandatory
     export

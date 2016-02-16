@@ -5,7 +5,13 @@ RSpec.describe Vacancy, type: :model do
   let(:opened_vacancies) {FactoryGirl.create_list(:vacancy, 3)}
   let(:archived_vacancies) {FactoryGirl.create_list(:archived_vacancy, 3)}
   let(:authenticated_user) {FactoryGirl.create :user, resume: nil}
+  let(:company) {FactoryGirl.create :company, user: employer}
+  let(:employer_vacancy) {FactoryGirl.create :vacancy, company: company}
   let(:employer) {FactoryGirl.create :employer}
+  let(:admin) {FactoryGirl.create :admin}
+  let(:manager) {FactoryGirl.create :manager, invite_code: invite_code.code}
+  let(:invite_code) {FactoryGirl.create :invite_code, user: employer}
+
   it {expect(subject).to validate_presence_of(:title)}
   it {expect(subject).to validate_presence_of(:description)}
   it {expect(subject).to validate_presence_of(:deadline)}
@@ -97,6 +103,37 @@ RSpec.describe Vacancy, type: :model do
 
     it "return true if user is not applied resume to vacancy" do
       expect(subject.can_applly? authenticated_user).to be_truthy
+    end
+  end
+
+  context "#allow_to_close?" do
+
+    it "return true for employer if vacancy created by his company" do
+      expect(employer_vacancy.allow_to_close? employer).to be_truthy
+    end
+
+    it "return false for employer if vacancy created by other company" do
+      expect(subject.allow_to_close? employer).to be_falsey
+    end
+
+    it "return true for manger if  vacancy created by his company" do
+      expect(employer_vacancy.allow_to_close? manager).to be_truthy
+    end
+
+    it "return false for manager if vacancy created by other company" do
+      expect(subject.allow_to_close? manager).to be_falsey
+    end
+
+    it "return false for admin" do
+      expect(subject.allow_to_close? admin).to be_falsey
+    end
+
+    it "return false for applicant" do
+      expect(subject.allow_to_close? authenticated_user).to be_falsey
+    end
+
+    it "return false for guest" do
+      expect(subject.allow_to_close? nil).to be_falsey
     end
   end
 end

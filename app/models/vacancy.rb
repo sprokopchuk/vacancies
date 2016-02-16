@@ -17,6 +17,16 @@ class Vacancy < ActiveRecord::Base
     end
   end
 
+  def allow_to_close? user
+    user &&
+    if user.role? :employer
+      self.company.user_id == user.id
+    elsif user.role? :manager
+      self.company.user_id == user.get_owner_of_invite_code.id
+    else
+      false
+    end
+  end
   def close
     self.update deadline: (Date.current - 1)
   end

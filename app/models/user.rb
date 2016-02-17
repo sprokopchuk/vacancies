@@ -34,6 +34,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  def send_denial_email user, mail = {subject: nil, body: nil}
+    if self.role?(:employer)
+     CompanyMailer.denial_email(user, self.company, mail).deliver_now
+    elsif self.role?(:manager)
+     CompanyMailer.denial_email(user, self.get_owner_of_invite_code.company, mail).deliver_now
+   end
+  end
+
   def generate_invite_code
     SecureRandom.uuid if self.role?(:employer)
   end

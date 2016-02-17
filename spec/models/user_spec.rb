@@ -7,7 +7,7 @@ RSpec.describe User, type: :model do
   let(:vacancy) {FactoryGirl.create :vacancy}
   let(:applied_job) {FactoryGirl.create :applied_job, :user => subject, vacancy: vacancy}
   let(:manager) {FactoryGirl.build :manager, invite_code: invite_code.code}
-  let(:invite_code) {FactoryGirl.create :invite_code}
+  let(:invite_code) {FactoryGirl.create :invite_code, user: employer}
   it {expect(subject).to validate_presence_of(:first_name)}
   it {expect(subject).to validate_presence_of(:last_name)}
   it {expect(subject).to belong_to(:speciality)}
@@ -35,6 +35,24 @@ RSpec.describe User, type: :model do
     end
   end
 
+  context "#send_denial_email" do
+    it "don't sends email for applicant" do
+      expect{subject.send_denial_email(employer)}.not_to change {ActionMailer::Base.deliveries.count}
+    end
+
+    it "don't sends email for admin" do
+      subject.role = "admin"
+      expect{subject.send_denial_email(employer)}.not_to change {ActionMailer::Base.deliveries.count}
+    end
+
+    it "sends a mail for employer" do
+      expect{employer.send_denial_email(subject)}.to change {ActionMailer::Base.deliveries.count}.by(1)
+    end
+
+    it "sends a mail for manager" do
+      expect{manager.send_denial_email(subject)}.to change {ActionMailer::Base.deliveries.count}.by(1)
+    end
+  end
   context "#get_owner_of_invite_code" do
     it "return nil for user who is not manager" do
       expect(subject.get_owner_of_invite_code).to eq nil

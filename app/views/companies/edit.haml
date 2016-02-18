@@ -1,0 +1,24 @@
+.col-md-4.col-md-offset-3
+  = simple_form_for @company, url: company_path(@company) do |f|
+    = f.input :country, collection: CountryStateSelect.countries_collection, input_html: {"data-placeholder" => "Choose a country..."}, label: false
+    = f.input :state, CountryStateSelect.state_options({ form: f, field_names: { :country => :country, :state => :state}, input_html: {"data-placeholder" => "Choose a state..."}, label: false})
+    = f.input :city, CountryStateSelect.city_options({form: f, field_names: {:state => :state, :city => :city}, input_html: {"data-placeholder" => "Choose a city..."}, label: false})
+    .input-group
+      = f.input_field :name, label: false, class: "form-control"
+      %span.input-group-addon
+        %span.glyphicon.glyphicon-asterisk
+    %br
+    .input-group
+      = f.input_field :description, as: :text, label: false, class: "form-control"
+      %span.input-group-addon
+        %span.glyphicon.glyphicon-asterisk
+    %br
+    .input-group
+      = f.input_field :url, as: :url, label: false, class: "form-control"
+      %span.input-group-addon
+        %span.glyphicon.glyphicon-asterisk
+    = f.input_field :status, as: :hidden, value: "active"
+    %br
+    = f.button :submit, "Update company", class: "btn btn-primary btn-sm pull-right"
+
+

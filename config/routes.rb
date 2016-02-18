@@ -9,6 +9,12 @@ Rails.application.routes.draw do
     get 'archived', on: :collection
   end
 
+  resources :users, only: [] do
+    controller "users/emails" do
+      get 'new_email', on: :member,  as: 'new_email'
+      post 'send_denial', on: :member
+    end
+  end
   resource :chart, controller: "vacancies/charts", only: [:show, :create]
   resources :invite_codes, only: [:index, :create]
   resources :companies, only: [:show] do

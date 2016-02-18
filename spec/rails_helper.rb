@@ -8,8 +8,8 @@ require 'cancan/matchers'
 require 'spec_helper'
 require 'rspec/rails'
 require 'capybara/rspec'
-include Warden::Test::Helpers
-Warden.test_mode!
+require 'capybara/poltergeist'
+require 'faker'
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -26,6 +26,7 @@ Warden.test_mode!
 # require only the support files necessary.
 #
 # Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+Capybara.javascript_driver = :poltergeist
 
 # Checks for pending migration and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
@@ -42,6 +43,13 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = false
   config.include Devise::TestHelpers, :type => :controller
 
+    config.include Warden::Test::Helpers
+    config.before :suite do
+      Warden.test_mode!
+    end
+   config.after :each do
+      Warden.test_reset!
+    end
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
   # `post` in specs under `spec/controllers`.

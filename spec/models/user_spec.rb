@@ -117,6 +117,11 @@ RSpec.describe User, type: :model do
     end
   end
   context "#current?" do
+
+    it "return true if current user is manager" do
+      expect(manager.current? employer.id).to be_truthy
+    end
+
     it "return true if current user is own page profile" do
       expect(subject.current? subject.id).to be_truthy
     end

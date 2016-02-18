@@ -49,7 +49,11 @@ class User < ActiveRecord::Base
     self.speciality.name.capitalize if self.speciality
   end
   def current? id
-    self.id == id
+    if self.role? :manager
+      self.get_owner_of_invite_code.id == id
+    else
+      self.id == id
+    end
   end
 
   def get_owner_of_invite_code

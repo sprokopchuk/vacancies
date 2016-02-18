@@ -1,0 +1,18 @@
+%h4 You may leave fields are blank and will be sent default denial email
+.col-md-12
+  .col-md-12
+    %b To:
+    #{@user.full_name}
+    %br
+    %b From:
+    notifications@localhost.com
+    %br
+  .col-md-12
+  = form_tag send_denial_user_path(@user) do
+    .form-group
+      = text_field_tag "denial_email[subject]", nil, class: "form-control", placeholder: "Subject"
+      %br
+      = text_area_tag "denial_email[body]", nil, class: "form-control", placeholder: "Body"
+      %br
+    = submit_tag "Send Email", class: "btn btn-default pull-right"
+  %br

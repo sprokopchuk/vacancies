@@ -29,6 +29,7 @@
                 %th First Name
                 %th Last Name
                 %th Resume
+                %th Send email of denial
             %tbody
             - @vacancy.users.each.with_index do |user, i|
               %tr
@@ -37,6 +38,9 @@
                 %td #{user.last_name}
                 %td{"data-no-turbolink" => ""}
                   = link_to "Download", download_resume_user_path(user, vacancy_id: @vacancy)
+                %td
+                  = link_to "Send or Edit email", new_email_user_path(user), remote: true
+        #denial_email
       .panel-footer
         - if @vacancy.can_applly?(current_user)
           = form_tag attach_resume_vacancy_path, class: "navbar-form" do

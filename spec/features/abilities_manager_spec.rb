@@ -51,6 +51,16 @@ feature 'Manager' do
     expect(page).to have_content user.full_name
   end
 
+  scenario "download applicant's resume applied to vacancy" do
+    vacancy.company_id = manager.get_owner_of_invite_code.company.id
+    vacancy.save
+    vacancy.attach_resume user, File.new(File.join(Rails.root, 'spec', 'support', 'logo_image.png'))
+    click_link "My company"
+    click_link vacancy.title.capitalize
+    click_link "Download", :href => download_resume_user_path(user, vacancy_id: vacancy.id)
+    expect(response_headers['Content-Type']).to eq "image/png"
+  end
+
   scenario 'see own profile' do
     click_link "My profile"
     expect(page).to have_content(manager.full_name)

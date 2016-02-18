@@ -1,7 +1,11 @@
 .col-sm-6.col-md-5.col-md-offset-2
   .col-md-offset-2
+    %span.pull-right
+      = link_to edit_company_path(@company) do
+        .glyphicon.glyphicon-pencil.text-danger
     %h1 #{@company.name}
     %p #{@company.description}
+
   - @vacancies.each do |vacancy|
     .panel.panel-info
       .panel-heading.col-md-12

@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   end
   resource :chart, controller: "vacancies/charts", only: [:show, :create]
   resources :invite_codes, only: [:index, :create]
-  resources :companies, only: [:show] do
+  resources :companies, only: [:show, :edit, :update] do
     resources :vacancies, except: :index, shallow: true do
       post 'close', on: :member
       post 'attach_resume', on: :member

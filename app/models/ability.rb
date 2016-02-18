@@ -16,11 +16,13 @@ class Ability
       if user.approved?
         can [:read, :create], InviteCode, :user_id => user.id
         can [:read, :download_resume], User
-        can [:create, :update], Company, :user_id => user.id
+        can [:new_email, :send_denial], :email
+        can :update, Company, :user_id => user.id
         can [:close, :create], Vacancy, :company => {:user_id => user.id}
       end
     when user.role?(:manager)
       can [:read, :download_resume], User
+      can [:new_email, :send_denial], :email
       can [:close, :create], Vacancy, :company => {:user_id => user.get_owner_of_invite_code.id}
     when user.role?(:applicant)
       can [:download_resume, :read], User, :id => user.id

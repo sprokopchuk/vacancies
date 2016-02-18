@@ -51,9 +51,12 @@ RSpec.describe Ability, type: :model do
     context "for companies" do
       it {expect(subject).to be_able_to(:read, other_company)}
       it {expect(subject).not_to be_able_to(:update, company)}
-      it {expect(subject).not_to be_able_to(:create, Company)}
     end
 
+    context "for emails" do
+      it {expect(subject).to be_able_to(:send_denial, :email)}
+      it {expect(subject).to be_able_to(:new_email, :email)}
+    end
     context "for users" do
       it {expect(subject).to be_able_to(:read, applicant_user)}
       it {expect(subject).to be_able_to(:download_resume, applicant_user)}
@@ -79,7 +82,6 @@ RSpec.describe Ability, type: :model do
 
     context "for companies" do
       context "can't manage company if employer is not approved" do
-        it {expect(subject).not_to be_able_to(:create, Company)}
         it {expect(subject).not_to be_able_to(:update, company)}
       end
 
@@ -95,7 +97,6 @@ RSpec.describe Ability, type: :model do
           employer_user.update(:approved => true)
         end
         it {expect(subject).to be_able_to(:read, company)}
-        it {expect(subject).to be_able_to(:create, Company)}
         it {expect(subject).to be_able_to(:update, company)}
       end
     end
@@ -105,6 +106,7 @@ RSpec.describe Ability, type: :model do
         employer_user.update(:approved => true)
         expect(subject).to be_able_to(:download_resume, applicant_user)
       end
+
       it "can't download resume if employer is not approved" do
         expect(subject).not_to be_able_to(:download_resume, applicant_user)
       end
@@ -113,8 +115,27 @@ RSpec.describe Ability, type: :model do
         employer_user.update(:approved => true)
         expect(subject).to be_able_to(:read, applicant_user)
       end
+      it "can't read user's resume if employer is not approved" do
+        expect(subject).not_to be_able_to(:read, applicant_user)
+      end
     end
 
+    context "for emails" do
+      it "can get new_email if employer is approved" do
+        employer_user.update(:approved => true)
+        expect(subject).to be_able_to(:new_email, :email)
+      end
+      it "can't get new_email if employer is not approved" do
+        expect(subject).not_to be_able_to(:new_email, :email)
+      end
+      it "can send email of denial if employer is approved" do
+        employer_user.update(:approved => true)
+        expect(subject).to be_able_to(:send_denial, :email)
+      end
+      it "can't send email of denial if employer is not approved" do
+        expect(subject).not_to be_able_to(:send_denial, :email)
+      end
+    end
     context "for invite codes" do
       before do
         employer_user.update(:approved => true)

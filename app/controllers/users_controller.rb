@@ -4,7 +4,8 @@ class UsersController < ApplicationController
 
   def download_resume
     if @user.resume.file
-      if current_user.role?(:employer) && !@user.resume_viewed?(params[:vacancy_id])
+      if (current_user.role?(:employer) || current_user.role?(:manager)) &&
+        !@user.resume_viewed?(params[:vacancy_id])
         @user.toggle_viewed params[:vacancy_id]
       end
       send_file @user.resume.file.path,

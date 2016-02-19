@@ -1,4 +1,3 @@
-*.lock
 # Ignore bundler config.
 /.bundle
 /public/uploads/*

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'Vacancy search' do
 
-  given(:company) {FactoryGirl.create :company, city: "Dnper", country: "UA"}
+  given(:company) {FactoryGirl.create :company, city: "Dnepr", country: "UA"}
   given(:vacancy) {FactoryGirl.create :vacancy, company: company}
   given(:other_vacancy) {FactoryGirl.create :vacancy, company: company}
   background do

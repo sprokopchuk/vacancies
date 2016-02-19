@@ -10,7 +10,7 @@ feature 'Applicant' do
   end
   scenario 'attach own resume to the job' do
     click_link "#{vacancy.title.capitalize}"
-    attach_file "vacancy[file]", user.resume.file.path
+    attach_file "vacancy[file]", File.join(Rails.root, 'spec', 'support', 'logo_image.png')
     click_button "Send resume"
     expect(page).to have_content('Your resumne was successfully sent.')
   end

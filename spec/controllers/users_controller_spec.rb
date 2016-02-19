@@ -32,6 +32,9 @@ RSpec.describe UsersController, type: :controller do
 
     describe "GET #download_resume" do
 
+      before do
+        allow(controller).to receive(:open).and_return File.open(File.join(Rails.root, 'spec', 'support', 'logo_image.png'))
+      end
       it "respond successful status when downloading resume is okay" do
         get :download_resume, id: authenticated_user.id
         expect(response.status).to eq 200

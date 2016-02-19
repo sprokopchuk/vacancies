@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-
+ruby '2.2.1'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.5.1'
 # Use postgresql as the database for Active Record
@@ -20,6 +20,8 @@ gem 'rails_admin'
 gem 'rails_admin_toggleable'
 gem 'chartkick', '~> 1.4', '>= 1.4.1'
 gem 'groupdate'
+gem "fog"
+gem 'dotenv-rails'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
@@ -45,10 +47,12 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 gem 'rails_12factor', group: :production
+gem 'factory_girl_rails'
+gem 'faker'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'rspec-rails'
-  gem 'factory_girl_rails'
   gem 'byebug'
 
 end
@@ -58,7 +62,6 @@ group :test do
   gem 'phantomjs', :require => 'phantomjs/poltergeist'
   gem 'selenium-webdriver'
   gem 'capybara'
-  gem 'faker'
   gem 'database_cleaner'
   gem 'shoulda-matchers'
   gem 'rspec-collection_matchers'

@@ -8,7 +8,7 @@
     notifications@localhost.com
     %br
   .col-md-12
-  = form_tag send_denial_user_path(@user) do
+  = form_tag send_denial_user_path(@user), id: "denial_email_form" do
     .form-group
       = text_field_tag "denial_email[subject]", nil, class: "form-control", placeholder: "Subject"
       %br

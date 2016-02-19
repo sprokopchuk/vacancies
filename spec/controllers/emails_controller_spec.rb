@@ -36,17 +36,23 @@ RSpec.describe Users::EmailsController, type: :controller do
   describe "POST #send_denial" do
     before do
       allow(employer).to receive(:company).and_return company
+      allow(employer).to receive(:send_denial_email).and_return true
     end
     it "receives a send_denial_email with params" do
       expect(employer).to receive(:send_denial_email).with(user, params)
       post :send_denial, id: user.id, denial_email: params
     end
 
-    it "redirects to :back after sending denial email" do
+    it "sends successful message after sending denial email" do
        post :send_denial, id: user.id, denial_email: params
-       expect(response).to redirect_to(:back)
+       expect(flash[:notice]).to eq("Denial email was successfully sent")
     end
 
+    it "sends fail message after email is not sent" do
+      allow(employer).to receive(:send_denial_email).and_return nil
+        post :send_denial, id: user.id, denial_email: params
+       expect(flash[:alert]).to eq("Something is went wrong. Email is not sent")
+    end
     context "without abilities to send denial email" do
       before do
         ability.cannot :send_denial

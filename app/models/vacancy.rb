@@ -1,4 +1,5 @@
 class Vacancy < ActiveRecord::Base
+  include RailsAdminCharts
   validates :title, :description, :deadline, :city, :country, presence: true
   belongs_to :company
   belongs_to :speciality
@@ -41,6 +42,19 @@ class Vacancy < ActiveRecord::Base
   def set_city_and_country
     self.city = self.company.city
     self.country = self.company.country
+  end
+
+
+  def self.class
+    Company
+  end
+
+  def self.chart_form?
+    true
+  end
+
+  def self.sym_for_condition
+    :company_id
   end
 
 end

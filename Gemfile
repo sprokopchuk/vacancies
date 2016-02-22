@@ -22,6 +22,7 @@ gem 'chartkick', '~> 1.4', '>= 1.4.1'
 gem 'groupdate'
 gem "fog"
 gem 'dotenv-rails'
+gem 'rails_admin_charts', :git => "https://github.com/sprokopchuk/rails_admin_charts.git"
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views

@@ -9,7 +9,7 @@ class Ability
       can :access, :rails_admin
       can :dashboard
       can [:read, :create], :chart
-      can :read, Vacancy
+      can [:read, :charts], Vacancy
       can :manage, Company
       can [:read, :toggle], User
     when user.role?(:employer)

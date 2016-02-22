@@ -77,6 +77,7 @@ RailsAdmin.config do |config|
     end
   end
   config.actions do
+    charts
     toggle
     dashboard                     # mandatory
     index                         # mandatory

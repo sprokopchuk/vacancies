@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe UsersController, type: :controller do
   let(:authenticated_user) {FactoryGirl.build_stubbed :user}
+  let(:applied_job) {FactoryGirl.build_stubbed :applied_job, user: user, vacancy: vacancy}
   let(:vacancy) {FactoryGirl.build_stubbed :vacancy}
   let(:ability) {Ability.new(authenticated_user)}
 
@@ -36,6 +37,7 @@ RSpec.describe UsersController, type: :controller do
         allow(controller).to receive(:open).and_return File.open(File.join(Rails.root, 'spec', 'support', 'logo_image.png'))
       end
       it "respond successful status when downloading resume is okay" do
+        allow(authenticated_user).to receive(:resume_viewed?).and_return true
         get :download_resume, id: authenticated_user.id
         expect(response.status).to eq 200
       end
@@ -48,6 +50,7 @@ RSpec.describe UsersController, type: :controller do
       context "without abilities to download user's resume" do
         before do
           ability.cannot :read, authenticated_user
+          allow(authenticated_user).to receive(:resume_viewed?).and_return true
         end
 
         it "redirects to root_path" do

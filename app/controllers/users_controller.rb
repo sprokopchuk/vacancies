@@ -4,7 +4,7 @@ class UsersController < ApplicationController
 
   def download_resume
     if @user.resume.file
-      unless resume_viewed_by_employer?
+      unless @user.resume_viewed?(params[:vacancy_id]) && not_employer?
         @user.toggle_viewed params[:vacancy_id]
       end
       data = open(@user.resume.url)
@@ -24,8 +24,8 @@ class UsersController < ApplicationController
 
   private
 
-  def resume_viewed_by_employer?
-    current_user.role?(:employer) || current_user.role?(:manager)) && !@user.resume_viewed?(params[:vacancy_id])
+  def not_employer?
+    !(current_user.role?(:employer) || current_user.role?(:manager))
   end
 
 end

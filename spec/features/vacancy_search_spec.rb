@@ -3,12 +3,13 @@ require 'rails_helper'
 feature 'Vacancy search' do
 
   given(:company) {FactoryGirl.create :company, city: "Dnepr", country: "UA"}
-  given(:vacancy) {FactoryGirl.create :vacancy, company: company}
+  given(:vacancy) {FactoryGirl.create :vacancy, company: company, deadline: Date.tomorrow}
   given(:other_vacancy) {FactoryGirl.create :vacancy, company: company}
   background do
     other_vacancy
     FactoryGirl.create_list :vacancy, 20
     vacancy
+    Vacancy.unscoped.order(:id)
     visit root_path
   end
 

@@ -30,10 +30,17 @@ class VacancySearch
 
   def by_search query
     query.downcase!
+    code_countries, countries = [], []
+    begin
+      countries = IsoCountryCodes.search_by_name(query)
+    rescue Exception => e
+    end
+    code_countries = countries.map!{|c| c = c.alpha2} if countries.any?
     @vacancies = @vacancies.joins(:company, :speciality)
-      .where('lower(vacancies.city) LIKE :search OR
+      .where("lower(vacancies.city) LIKE :search OR
               lower(companies.name) LIKE :search OR
-              lower(specialities.name) LIKE :search', search: "%#{query}%")
+              lower(specialities.name) LIKE :search OR
+              vacancies.country IN (:country)", search: "%#{query}%", :country => code_countries)
   end
 
   def by_city

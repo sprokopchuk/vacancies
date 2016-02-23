@@ -14,6 +14,7 @@ gem 'sass-rails', '~> 5.0'
 gem "haml-rails", "~> 0.9"
 gem 'chosen-rails'
 gem 'country_state_select', '~> 3.0', '>= 3.0.1'
+gem 'iso_country_codes'
 gem 'virtus'
 gem 'wicked'
 gem 'rails_admin'

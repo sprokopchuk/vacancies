@@ -284,6 +284,7 @@ GEM
     ice_nine (0.11.2)
     inflecto (0.0.2)
     ipaddress (0.8.3)
+    iso_country_codes (0.7.4)
     jbuilder (2.4.1)
       activesupport (>= 3.0.0, < 5.1)
       multi_json (~> 1.2)
@@ -491,6 +492,7 @@ DEPENDENCIES
   fog
   groupdate
   haml-rails (~> 0.9)
+  iso_country_codes
   jbuilder (~> 2.0)
   jquery-rails
   kaminari

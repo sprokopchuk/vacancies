@@ -4,7 +4,8 @@ RSpec.describe VacancySearch, type: :model do
 
   let(:company) {FactoryGirl.create :company}
   let(:opened_vacancies) {FactoryGirl.create_list :vacancy, 3, company: company}
-  let(:searched_vacancy) {FactoryGirl.create :vacancy}
+  let(:other_company) {FactoryGirl.create :company, city: "Dnper", country: "UA"}
+  let(:searched_vacancy) {FactoryGirl.create :vacancy, company: other_company}
   let(:params) {{}}
   context "#call" do
 
@@ -38,6 +39,14 @@ RSpec.describe VacancySearch, type: :model do
     end
 
     context "by search" do
+
+      it "return list of vacancies if params[:search] is set a as few characters of country" do
+        params["search"] = "ukr"
+        expect(
+          VacancySearch.new(params: params).call
+          ).to match_array([searched_vacancy])
+      end
+
       it "return list of vacancies if params[:search] is set a as few characters of city" do
         params["search"] = searched_vacancy.city
         params["search"].slice! 0

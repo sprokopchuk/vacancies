@@ -25,4 +25,11 @@ feature 'Applicant' do
     click_link "My profile"
     expect(page).to have_content(user.full_name)
   end
+
+  scenario "download own resume in profile" do
+    click_link "My profile"
+    click_link "Download", :href => download_resume_user_path(user)
+    expect(response_headers['Content-Type']).to eq "image/png"
+  end
+
 end

@@ -43,7 +43,7 @@
         #denial_email
       .panel-footer
         - if @vacancy.can_applly?(current_user)
-          = form_tag attach_resume_vacancy_path, class: "navbar-form" do
+          = form_tag attach_resume_vacancy_path, class: "navbar-form", multipart: true do
             .form-group
               = file_field_tag "vacancy[file]", class: "form-control"
             = submit_tag "Send resume", class: "btn btn-default"

@@ -24,7 +24,7 @@ class VacancySearch
   private
 
   def default_vacancies
-    Vacancy.unscoped.all
+    Vacancy.unscoped
   end
 
 

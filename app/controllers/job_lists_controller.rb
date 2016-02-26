@@ -1,9 +1,9 @@
 class JobListsController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :specialities
 
   def show
+    specialities
     @job_list = current_user.vacancies.page(params[:page])
   end
 

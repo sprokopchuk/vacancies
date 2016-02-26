@@ -10,7 +10,7 @@ class VacanciesController < ApplicationController
   end
 
   def show
-    @vacancy = Vacancy.unscoped.find(params[:id])
+    @vacancy = unscoped_vacancies.find(params[:id])
   end
 
 
@@ -38,7 +38,7 @@ class VacanciesController < ApplicationController
   end
 
   def attach_resume
-    @vacancy = Vacancy.unscoped.find(params[:id])
+    @vacancy = unscoped_vacancies.find(params[:id])
     authorize! :attach_resume, @vacancy
     if params[:vacancy][:file].present?
       @vacancy.attach_resume(current_user, params[:vacancy][:file])
@@ -50,6 +50,9 @@ class VacanciesController < ApplicationController
 
   private
 
+  def unscoped_vacancies
+    Vacancy.unscoped
+  end
   def specialities
     @specialities = Speciality.all
   end

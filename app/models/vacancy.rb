@@ -1,5 +1,5 @@
 class Vacancy < ActiveRecord::Base
-  #include RailsAdminCharts
+  include RailsAdminCharts
   validates :title, :description, :deadline, :city, :country, presence: true
   belongs_to :company
   belongs_to :speciality

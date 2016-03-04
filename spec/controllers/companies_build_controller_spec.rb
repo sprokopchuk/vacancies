@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Companies::BuildController, type: :controller do
-  let(:employer) {FactoryGirl.create :employer}
+  let(:employer) {FactoryGirl.build_stubbed :employer}
   let(:vacancy) {FactoryGirl.build_stubbed :vacancy}
   let(:company) {FactoryGirl.build_stubbed :company, user: employer}
   let(:company_on_last_step) {FactoryGirl.build_stubbed :company, user: employer, status: steps.last.to_s}

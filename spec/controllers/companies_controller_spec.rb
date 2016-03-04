@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe CompaniesController, type: :controller do
-  let(:employer) {FactoryGirl.create :employer}
+  let(:employer) {FactoryGirl.build_stubbed :employer}
   let(:vacancy) {FactoryGirl.build_stubbed :vacancy}
   let(:company) {FactoryGirl.build_stubbed :company, user: employer}
   let(:company_params) {FactoryGirl.attributes_for(:company).stringify_keys}

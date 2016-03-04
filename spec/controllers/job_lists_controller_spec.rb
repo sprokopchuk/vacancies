@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe JobListsController, type: :controller do
-  let(:authenticated_user) {FactoryGirl.create :user}
+  let(:authenticated_user) {FactoryGirl.build_stubbed :user}
   let(:vacancy) {FactoryGirl.build_stubbed :vacancy}
 
   describe "GET #show" do

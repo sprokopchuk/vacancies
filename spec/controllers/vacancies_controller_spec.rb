@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe VacanciesController, type: :controller do
 
-  let(:authenticated_user) {FactoryGirl.create :user}
+  let(:authenticated_user) {FactoryGirl.build_stubbed :user}
   let(:company) {FactoryGirl.build_stubbed :company, user: authenticated_user}
   let(:ability) {Ability.new(authenticated_user)}
   let(:vacancy) {FactoryGirl.build_stubbed :vacancy, company: company}
